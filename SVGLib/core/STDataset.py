@@ -12,6 +12,38 @@ DataFrames = Union[pd.DataFrame, np.ndarray, Path, str]
 
 
 class STDataset(object):
+    """
+    STDataset: A meta class for discribing Spatial Transcriptomics data.
+
+    Parameters
+    ==========
+    count_df : np.ndarray, pd.DataFrame, str or Path
+       Expression matrix for Spatial Transcriptomics Data. If ``str`` or ``Path``
+       is given, SVGLib will try to read file with given path with pandas.
+
+       Default shape: (spot * gene)
+
+    coordinate_df : np.ndarray, pd.DataFrame, str or Path
+       Coordinates for Spatial Transcriptomics Data. If ``str`` or ``Path``
+       is given, SVGLib will try to read file with given path with pandas.
+
+       Default shape: (spot * 2)
+
+    count_transpose : bool, default False
+        Whether to transpose count matrix.
+
+    coordinate_transpose : bool, default False
+        Whether to transpose coordinate dataframe.
+
+    count_df_kwargs : dict, default None
+        Keyword arguments pass to ``pandas.read_csv`` if ``str`` or ``Path`` is
+        given to ``count_df``.
+
+    coordinate_df_kwargs : dict, default None
+        Keyword arguments pass to ``pandas.read_csv`` if ``str`` or ``Path`` is
+        given to ``coordinate_df``.
+
+    """
     def __init__(
         self,
         count_df: DataFrames,
@@ -21,9 +53,6 @@ class STDataset(object):
         count_df_kwargs: dict = None,
         coordinate_df_kwargs: dict = None,
     ) -> None:
-        """
-        STDataset
-        """
 
         # attributes initial
         self._count_df: Optional[pd.DataFrame] = None
@@ -35,7 +64,7 @@ class STDataset(object):
         self._local_moran_p: Optional[pd.DataFrame] = None
         self._AI: Optional[pd.DataFrame] = None
         self._Di: Optional[pd.DataFrame] = None
-        self._gene_cluster: Optional[pd.DataFrame] = None
+        self._gene_cluster: Optional[pd.Series] = None
 
         # dataframes check
         if isinstance(count_df, pd.DataFrame):
@@ -63,44 +92,87 @@ class STDataset(object):
         self._coordinate_df.sort_index(inplace=True)
         self._coordinate_df.columns = ["X", "Y"]
 
+        err = "Expression matrix and coordinate file have different number of spots."
+        assert self._count_df.shape[0] == self._coordinate_df.shape[0], err
         err = "Spots' name mismatch!"
         assert all(self._count_df.index == self._coordinate_df.index), err
 
     def acquire_weight(self, k: int = 6, **kwargs) -> None:
+        """
+        Acquire weight for analysis.
+
+        Parameters
+        ==========
+        k: int, default 6
+            Number of nearest neighbors for KNN network.
+
+        **kwargs
+            Additional keyword arguments passed to the libpysal.weights.KNN call.
+
+        """
         self._weight = KNN(self._coordinate_df, k=k, **kwargs)
         self._weight_type = ("KNN", str(k))
 
     def acquire_hotspot(self, **kwargs) -> None:
+        """
+        Acquire hotspot matrix.
+
+        Parameters
+        ==========
+        **kwargs
+            Additional keyword arguments passed to local_moran call.
+
+        """
         if self._weight is None:
             self.acquire_weight()
-        result_dict = moran.local_moran(
+        hotspot, i_value, p_value = moran.local_moran(
             gene_expression_df=self.count_df,
             weights=self.weight,
             **kwargs,
         )
-        self._hotspot_df = result_dict["hotspot"].reindex(
+        self._hotspot_df = hotspot.reindex(
             index=self.spots,
             columns=self.genes,
         )
-        self._local_moran_i = result_dict["i_value"]
-        self._local_moran_p = result_dict["p_value"]
+        self._local_moran_i = i_value
+        self._local_moran_p = p_value
 
     def acquire_density(self, cores: int = density.cpu_count()) -> None:
+        """
+        Acquire local Di and global AI value.
+
+        Parameters
+        ==========
+        cores: int
+            Number of threads to run SVGLib. Use all available cpus by default.
+
+        """
         if self._hotspot_df is None:
             self.acquire_hotspot()
-        result_dict = density.hotspot_AI(
+        self._AI, self._Di = density.hotspot_AI(
             hotspot_df=self._hotspot_df,
             weight_df=self._local_moran_p,
             knn=self._weight,
         )
-        self._AI = result_dict["AI"]
-        self._Di = result_dict["Di"]
 
     def find_clusters(
         self,
         n_genes: int = 1000,
         n_gene_clusters: int = 8,
     ) -> None:
+        """
+        Find gene clusters.
+
+        Parameters
+        ==========
+        n_genes: int, default 1000
+            Number of genes to find clusters.
+
+        n_gene_clusters: int, default 8
+            Number of gene clusters to find.
+
+
+        """
         self._gene_cluster = cluster.cluster(
             self._hotspot_df,
             self._AI,
@@ -110,30 +182,37 @@ class STDataset(object):
 
     @property
     def count_df(self) -> pd.DataFrame:
+        """Expression matrix."""
         return self._count_df
 
     @property
     def coordinate_df(self) -> pd.DataFrame:
+        """Coordinate information."""
         return self._coordinate_df
 
     @property
     def n_spots(self) -> int:
+        """Number of total spots."""
         return self._count_df.shape[0]
 
     @property
-    def spots(self) -> pd.Series:
+    def spots(self) -> pd.Index:
+        """An Index for spots' names."""
         return self._count_df.index
 
     @property
     def n_genes(self) -> int:
+        """Number of total genes."""
         return self._count_df.shape[1]
 
     @property
-    def genes(self) -> pd.Series:
+    def genes(self) -> pd.Index:
+        """An Index for genes' names."""
         return self._count_df.columns
 
     @property
     def weight(self) -> libpysal_W:
+        """Weight used by SVGLib. Use KNN if not specified."""
         return self._weight
 
     @weight.setter
@@ -143,22 +222,30 @@ class STDataset(object):
 
     @property
     def weight_type(self) -> Tuple[Optional[str], Optional[str]]:
+        """
+        What kind of weight is used. The second element indicates parameter k
+        used by KNN in default.
+        """
         return self._weight_type
 
     @property
     def hotspot_df(self) -> pd.DataFrame:
+        """Hotspot matrix."""
         return self._hotspot_df
 
     @property
     def AI(self) -> pd.Series:
+        """A Series for AI value."""
         return self._AI
 
     @property
     def Di(self) -> pd.DataFrame:
+        """A DataFrame for local Di value."""
         return self._Di
 
     @property
     def gene_cluster(self) -> pd.Series:
+        """Gene cluster result."""
         return self._gene_cluster
 
 

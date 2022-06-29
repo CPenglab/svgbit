@@ -33,7 +33,7 @@ def main():
         "--k",
         type=int,
         default=6,
-        help="number of neighbors to build knn network (default: %(default)s)",
+        help="number of nearest neighbors for KNN network (default: %(default)s)",
     )
     parser.add_argument(
         "--n_genes",
