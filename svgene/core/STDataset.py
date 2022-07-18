@@ -37,11 +37,11 @@ class STDataset(object):
     coordinate_transpose : bool, default False
         Whether to transpose coordinate dataframe.
 
-    count_df_kwargs : dict, default None
+    count_df_kwargs : dict, default {}
         Keyword arguments pass to ``pandas.read_csv`` if ``str`` or ``Path`` is
         given to ``count_df``.
 
-    coordinate_df_kwargs : dict, default None
+    coordinate_df_kwargs : dict, default {}
         Keyword arguments pass to ``pandas.read_csv`` if ``str`` or ``Path`` is
         given to ``coordinate_df``.
 
@@ -52,8 +52,8 @@ class STDataset(object):
         coordinate_df: DataFrames,
         count_transpose: bool = False,
         coordinate_transpose: bool = False,
-        count_df_kwargs: dict = None,
-        coordinate_df_kwargs: dict = None,
+        count_df_kwargs: dict = {},
+        coordinate_df_kwargs: dict = {},
     ) -> None:
 
         # attributes initial
