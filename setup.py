@@ -4,8 +4,8 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(
-    name="SVGLib",
-    version="0.0.1",
+    name="svgene",
+    version="0.0.2",
     long_description=long_description,
     packages=find_packages(),
     include_package_data=True,
