@@ -17,8 +17,8 @@ sys.path.insert(0, os.path.abspath('../SVGLib'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'SVGLib'
-copyright = '2022, 1'
+project = 'svgene'
+copyright = '2022'
 author = 'fuyu-sama'
 
 # The full version, including alpha/beta/rc tags

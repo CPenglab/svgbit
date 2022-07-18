@@ -17,7 +17,7 @@ svgene has a command line version. Just tape
 svgene --help
 ```
 
-after installation with `pip`, and you may get a short help massage
+after installation, and you may get a short help massage
 
 ```
 usage: svgene [-h] [--count_transpose] [--coordinate_transpose] [--k K]
@@ -44,6 +44,8 @@ optional arguments:
   --cores CORES         number of threads to run svgene (default: 8)
 ```
 
+Follow the introduction and results will save to --savedir. 
+
 ### Python API
 
 #### Load data
@@ -58,13 +60,14 @@ dataset = svgene.STDataset(
 )
 ```
 
-Notice: svgene assume that the shape of count matrix and coordinate file is 
-(spot * gene) and (spot * 2). Specify `count_transpose` and `coordinate_transpose`
-as `True` when necessary. 
-
 `svgene.STDataset` also accept `pd.DataFrame`and `np.array` as `count_df` and 
 `coordinate_df`. If `str` or `pathlib.Path` are given, svgene would try to load
 data with `pandas`.
+
+**Notice**: svgene assume that the shape of count matrix and coordinate file is 
+(spot * gene) and (spot * 2). Specify `count_transpose` and `coordinate_transpose`
+as `True` when necessary. 
+
 
 #### Run svgene with one function
 

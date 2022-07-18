@@ -6,7 +6,7 @@ API reference
 
 STDataset
 =========
-.. currentmodule:: SVGLib
+.. currentmodule:: svgene
 .. autosummary::
     :toctree: _autosummary
     :recursive:
@@ -15,9 +15,9 @@ STDataset
 
 
 
-Run SVGLib within one function
+Run svgene within one function
 ==============================
-.. currentmodule:: SVGLib
+.. currentmodule:: svgene
 .. autosummary::
     :toctree: _autosummary
     :recursive:
@@ -28,7 +28,7 @@ Run SVGLib within one function
 
 STDataset Methods
 =================
-.. currentmodule:: SVGLib
+.. currentmodule:: svgene
 .. autosummary::
     :toctree: _autosummary
     :recursive:
@@ -43,7 +43,7 @@ STDataset Methods
 
 STDataset Attributes
 ====================
-.. currentmodule:: SVGLib
+.. currentmodule:: svgene
 .. autosummary::
     :toctree: _autosummary
     :recursive:
@@ -66,7 +66,7 @@ STDataset Attributes
 
 Functions not recommended use directly
 ======================================
-.. currentmodule:: SVGLib
+.. currentmodule:: svgene
 .. autosummary::
     :toctree: _autosummary
     :recursive:
