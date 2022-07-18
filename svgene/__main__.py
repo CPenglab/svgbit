@@ -73,6 +73,8 @@ def main():
         args.coordinate,
         count_transpose=args.count_transpose,
         coordinate_transpose=args.coordinate_transpose,
+        count_df_kwargs={"index_col": 0, "header": 0},
+        coordinate_df_kwargs={"index_col": 0, "header": 0},
     )
     d = run(
         d,
