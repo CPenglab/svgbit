@@ -37,6 +37,7 @@ STDataset Methods
     STDataset.acquire_hotspot
     STDataset.acquire_density
     STDataset.find_clusters
+    STDataset.svg_heatmap
 
 
 

@@ -1,6 +1,9 @@
+from __future__ import annotations
 from argparse import ArgumentParser
 from multiprocessing import cpu_count
 from pathlib import Path
+
+from PIL import Image
 
 from svgene import STDataset
 from svgene import run
@@ -48,6 +51,11 @@ def main():
         help="number of gene clusters to find (default: %(default)s)",
     )
     parser.add_argument(
+        "--he_image",
+        default=None,
+        help="path to H&E image. Only used for visualization (default: %(default)s)",
+    )
+    parser.add_argument(
         "--savedir",
         default=".",
         help="path to save results (default: %(default)s)",
@@ -78,6 +86,11 @@ def main():
     d.AI.to_csv(Path.joinpath(args.savedir, "AI.csv"))
     d.Di.to_csv(Path.joinpath(args.savedir, "Di.csv"))
     d.gene_cluster.to_csv(Path.joinpath(args.savedir, "gene_cluster.csv"))
+
+    he_image = None if args.he_image is None else Image.open(args.he_image)
+    fig, axes = d.svg_heatmap(he_image)
+    fig.savefig(Path.joinpath(args.savedir, "heatmap.jpg"))
+    he_image.close()
 
 
 if __name__ == "__main__":
