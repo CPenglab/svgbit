@@ -14,6 +14,9 @@ setup(
         "pysal>=2.4.0",
         "pandana>=0.6.1",
     ],
+    entry_points={'console_scripts': [
+        'svgene = svgene.__main__:main',
+    ]},
     py_modules=[],
     license="MIT",
     python_requires=">=3.8.12",
