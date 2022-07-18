@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="svgene",
-    version="0.0.2",
+    version="0.0.3",
     long_description=long_description,
     packages=find_packages(),
     include_package_data=True,

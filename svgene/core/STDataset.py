@@ -1,12 +1,13 @@
 from typing import Tuple, Union, Optional
 from pathlib import Path
 
+import matplotlib as mpl
 import numpy as np
 import pandas as pd
 from libpysal.weights import KNN
 from libpysal.weights import W as libpysal_W
 
-from . import cluster, density, moran
+from . import cluster, density, moran, plot
 
 DataFrames = Union[pd.DataFrame, np.ndarray, Path, str]
 
@@ -171,13 +172,38 @@ class STDataset(object):
         n_gene_clusters: int, default 8
             Number of gene clusters to find.
 
-
         """
         self._gene_cluster = cluster.cluster(
             self._hotspot_df,
             self._AI,
             n_genes=n_genes,
             n_gene_clusters=n_gene_clusters,
+        )
+
+    def svg_heatmap(
+        self,
+        he_image=None,
+    ) -> Tuple[mpl.figure.Figure, np.ndarray[mpl.axes.Axes]]:
+        """
+        Draw SVG distribution heatmap.
+
+        Patameters
+        ==========
+        he_image: PIL.Image.Image, default None
+            H&E image of tissue. If None is given (default), distribution map
+            will not show tissue picture.
+
+        Returns
+        =======
+        fig: matplotlib.figure.Figure
+        axes: numpy.ndarray[matplotlib.axes.Axes]
+
+        """
+        return plot.svg_heatmap(
+            self._hotspot_df,
+            self._coordinate_df,
+            self._gene_cluster,
+            he_image,
         )
 
     @property
