@@ -1,12 +1,28 @@
+import re
 from setuptools import setup, find_packages
+
+VERSIONFILE = "svgene/_version.py"
+verstrline = open(VERSIONFILE, "rt").read()
+VSRE = r"^__version__ = ['\"]([^'\"]*)['\"]"
+mo = re.search(VSRE, verstrline, re.M)
+if mo:
+    verstr = mo.group(1)
+else:
+    raise RuntimeError("Unable to find version string in %s." %
+                       (VERSIONFILE, ))
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(
     name="svgene",
-    version="0.0.4",
+    version=verstr,
+    author="CPenglab",
+    author_email="chengpeng@ynu.edu.cn",
+    discription="Find spatial variable genes for Spatial Trasncriptomics data.",
     long_description=long_description,
+    url="https://github.com/CPenglab/svgene",
+    license="MIT",
     packages=find_packages(),
     include_package_data=True,
     install_requires=[
@@ -17,7 +33,13 @@ setup(
     entry_points={'console_scripts': [
         'svgene = svgene.__main__:main',
     ]},
-    py_modules=[],
-    license="MIT",
     python_requires=">=3.8.12",
-)
+    classifiers=[
+        "Development Status :: 3 - Alpha",
+        "Environment :: Console",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+        "Programming Language :: Python :: 3 :: Only",
+        "Programming Language :: Python :: Implementation :: CPython",
+        "Topic :: Scientific/Engineering :: Bio-Informatics",
+    ])
