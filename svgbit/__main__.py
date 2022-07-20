@@ -88,7 +88,7 @@ def main():
     d.hotspot_df.to_csv(Path.joinpath(savedir, "hotspot_df.csv"))
     d.AI.to_csv(Path.joinpath(savedir, "AI.csv"))
     d.Di.to_csv(Path.joinpath(savedir, "Di.csv"))
-    d.gene_cluster.to_csv(Path.joinpath(savedir, "svg_cluster.csv"))
+    d.svg_cluster.to_csv(Path.joinpath(savedir, "svg_cluster.csv"))
 
     he_image = None if args.he_image is None else Image.open(args.he_image)
     fig, axes = d.svg_heatmap(he_image)
