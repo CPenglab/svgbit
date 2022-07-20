@@ -96,4 +96,4 @@ def svg_heatmap(
     ax_heatmap.set_xlabel("Genes")
     ax_heatmap.set_ylabel("Spots")
 
-    return fig, ndarray(axes)
+    return fig, axes
