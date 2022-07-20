@@ -1,6 +1,7 @@
 from multiprocessing import cpu_count
 
 from .core.STDataset import STDataset
+from .io import load_10X
 
 
 def run(
