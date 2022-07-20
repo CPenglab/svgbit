@@ -6,7 +6,7 @@ API reference
 
 STDataset
 =========
-.. currentmodule:: svgene
+.. currentmodule:: svgbit
 .. autosummary::
     :toctree: _autosummary
     :recursive:
@@ -15,9 +15,9 @@ STDataset
 
 
 
-Run svgene within one function
+Run svgbit within one function
 ==============================
-.. currentmodule:: svgene
+.. currentmodule:: svgbit
 .. autosummary::
     :toctree: _autosummary
     :recursive:
@@ -28,7 +28,7 @@ Run svgene within one function
 
 STDataset Methods
 =================
-.. currentmodule:: svgene
+.. currentmodule:: svgbit
 .. autosummary::
     :toctree: _autosummary
     :recursive:
@@ -44,7 +44,7 @@ STDataset Methods
 
 STDataset Attributes
 ====================
-.. currentmodule:: svgene
+.. currentmodule:: svgbit
 .. autosummary::
     :toctree: _autosummary
     :recursive:
@@ -67,7 +67,7 @@ STDataset Attributes
 
 Functions not recommended use directly
 ======================================
-.. currentmodule:: svgene
+.. currentmodule:: svgbit
 .. autosummary::
     :toctree: _autosummary
     :recursive:

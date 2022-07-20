@@ -1,7 +1,7 @@
 import re
 from setuptools import setup, find_packages
 
-VERSIONFILE = "svgene/_version.py"
+VERSIONFILE = "svgbit/_version.py"
 verstrline = open(VERSIONFILE, "rt").read()
 VSRE = r"^__version__ = ['\"]([^'\"]*)['\"]"
 mo = re.search(VSRE, verstrline, re.M)
@@ -15,13 +15,13 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(
-    name="svgene",
+    name="svgbit",
     version=verstr,
     author="CPenglab",
     author_email="chengpeng@ynu.edu.cn",
     discription="Find spatial variable genes for Spatial Trasncriptomics data.",
     long_description=long_description,
-    url="https://github.com/CPenglab/svgene",
+    url="https://github.com/CPenglab/svgbit",
     license="MIT",
     packages=find_packages(),
     include_package_data=True,
@@ -31,7 +31,7 @@ setup(
         "pandana>=0.6.1",
     ],
     entry_points={'console_scripts': [
-        'svgene = svgene.__main__:main',
+        'svgbit = svgbit.__main__:main',
     ]},
     python_requires=">=3.8.12",
     classifiers=[

@@ -1,8 +1,8 @@
 ####################
-svgene documentation
+svgbit documentation
 ####################
 
-Welcome! Here is the documentation of svgene, a python package to find spatial
+Welcome! Here is the documentation of svgbit, a python package to find spatial
 variable genes for Spatial Trasncriptomics data.
 
 To begin with, please refer our :any:`quick start <quick_start/index>`

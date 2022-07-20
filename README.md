@@ -1,26 +1,26 @@
-# svgene
+# svgbit
 
 ## Installation
 
 Install with `pip`:
 
 ```sh
-pip install svgene
+pip install svgbit
 ```
 
 ## Usage
 
 ### Command-line interface
-svgene has a command line version. Just tape
+svgbit has a command line version. Just tape
 
 ```sh
-svgene --help
+svgbit --help
 ```
 
 after installation, and you may get a short help massage
 
 ```
-usage: svgene [-h] [--count_transpose] [--coordinate_transpose] [--k K]
+usage: svgbit [-h] [--count_transpose] [--coordinate_transpose] [--k K]
               [--n_genes N_GENES] [--n_gene_clusters N_GENE_CLUSTERS] [--savedir SAVEDIR]
               [--cores CORES]
               count coordinate
@@ -42,21 +42,21 @@ optional arguments:
                         number of gene clusters to find (default: 8)
   --he_image HE_IMAGE   path to H&E image. Only used for visualization (default: None)
   --savedir SAVEDIR     path to save results (default: .)
-  --cores CORES         number of threads to run svgene (default: 8)
+  --cores CORES         number of threads to run svgbit (default: 8)
 ```
 
 Follow the introduction and results will save to --savedir. 
 
 ### Python API
-svgene has a set of python API. You may run svgene through command line or python.
+svgbit has a set of python API. You may run svgbit through command line or python.
 We recommend the usage of python API for more feature and full control of your input
 data.
 
 #### Load data
 
 ```python
-import svgene
-dataset = svgene.STDataset(
+import svgbit
+dataset = svgbit.STDataset(
     count_df="Data/count_df.csv",
     coordinate_df="Data/coor_df.csv",
     count_df_kwargs={"index_col": 0, "header": 0},
@@ -64,18 +64,18 @@ dataset = svgene.STDataset(
 )
 ```
 
-`svgene.STDataset` also accept `pd.DataFrame`and `np.array` as `count_df` and 
-`coordinate_df`. If `str` or `pathlib.Path` are given, svgene would try to load
+`svgbit.STDataset` also accept `pd.DataFrame`and `np.array` as `count_df` and 
+`coordinate_df`. If `str` or `pathlib.Path` are given, svgbit would try to load
 data with `pandas`.
 
-**Notice**: svgene assume that the shape of count matrix and coordinate file is 
+**Notice**: svgbit assume that the shape of count matrix and coordinate file is 
 (spot * gene) and (spot * 2). Specify `count_transpose` and `coordinate_transpose`
 as `True` when necessary. 
 
-#### Run svgene with one function
+#### Run svgbit with one function
 
 ```python
-svgene.run(dataset)
+svgbit.run(dataset)
 ```
 
 Visit our API reference for further detail.

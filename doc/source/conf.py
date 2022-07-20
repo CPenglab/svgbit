@@ -13,11 +13,11 @@
 import os
 import sys
 
-sys.path.insert(0, os.path.abspath('../SVGLib'))
+sys.path.insert(0, os.path.abspath('../svgbit'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'svgene'
+project = 'svgbit'
 copyright = '2022'
 author = 'fuyu-sama'
 
