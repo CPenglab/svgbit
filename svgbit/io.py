@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pandas as pd
 import scipy
-from svgbit import STDataset
+from .core import STDataset
 
 
 def load_10X(read_dir) -> STDataset:
