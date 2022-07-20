@@ -39,16 +39,16 @@ def main():
         help="number of nearest neighbors for KNN network (default: %(default)s)",
     )
     parser.add_argument(
-        "--n_genes",
+        "--n_svgs",
         type=int,
         default=1000,
-        help="number of genes to find clusters (default: %(default)s)",
+        help="number of SVGs to find clusters (default: %(default)s)",
     )
     parser.add_argument(
-        "--n_gene_clusters",
+        "--n_svg_clusters",
         type=int,
         default=8,
-        help="number of gene clusters to find (default: %(default)s)",
+        help="number of SVG clusters to find (default: %(default)s)",
     )
     parser.add_argument(
         "--he_image",
@@ -79,15 +79,15 @@ def main():
     d = run(
         d,
         k=args.k,
-        n_genes=args.n_genes,
-        n_gene_clusters=args.n_gene_clusters,
+        n_svgs=args.n_svgs,
+        n_svg_clusters=args.n_svg_clusters,
         cores=args.cores,
     )
 
     d.hotspot_df.to_csv(Path.joinpath(args.savedir, "hotspot_df.csv"))
     d.AI.to_csv(Path.joinpath(args.savedir, "AI.csv"))
     d.Di.to_csv(Path.joinpath(args.savedir, "Di.csv"))
-    d.gene_cluster.to_csv(Path.joinpath(args.savedir, "gene_cluster.csv"))
+    d.gene_cluster.to_csv(Path.joinpath(args.savedir, "svg_cluster.csv"))
 
     he_image = None if args.he_image is None else Image.open(args.he_image)
     fig, axes = d.svg_heatmap(he_image)

@@ -20,8 +20,8 @@ svgbit --help
 after installation, and you may get a short help massage
 
 ```
-usage: svgbit [-h] [--count_transpose] [--coordinate_transpose] [--k K]
-              [--n_genes N_GENES] [--n_gene_clusters N_GENE_CLUSTERS] [--savedir SAVEDIR]
+usage: svgbit [-h] [--count_transpose] [--coordinate_transpose] [--k K] [--n_svgs N_SVGS]
+              [--n_svg_clusters N_SVG_CLUSTERS] [--he_image HE_IMAGE] [--savedir SAVEDIR]
               [--cores CORES]
               count coordinate
 
@@ -37,9 +37,9 @@ optional arguments:
   --coordinate_transpose
                         transpose coordinate file if specified
   --k K                 number of nearest neighbors for KNN network (default: 6)
-  --n_genes N_GENES     number of genes to find clusters (default: 1000)
-  --n_gene_clusters N_GENE_CLUSTERS
-                        number of gene clusters to find (default: 8)
+  --n_svgs N_SVGS       number of SVGs to find clusters (default: 1000)
+  --n_svg_clusters N_SVG_CLUSTERS
+                        number of SVG clusters to find (default: 8)
   --he_image HE_IMAGE   path to H&E image. Only used for visualization (default: None)
   --savedir SAVEDIR     path to save results (default: .)
   --cores CORES         number of threads to run svgbit (default: 8)

@@ -5,11 +5,11 @@ from scipy.cluster import hierarchy as sch
 def cluster(
     hotspot_df: pd.DataFrame,
     AI_series: pd.Series,
-    n_genes: int = 1000,
-    n_gene_clusters: int = 8,
+    n_svgs: int = 1000,
+    n_svg_clusters: int = 8,
 ) -> pd.Series:
     """
-    Cluster genes using hotspot matrix.
+    Cluster SVGs using hotspot matrix.
 
     Parameters
     ==========
@@ -19,11 +19,11 @@ def cluster(
     AI_series : pd.Series
         A Series for AI value.
 
-    n_genes : int, default 1000
-        Number of genes to find clusters.
+    n_svgs : int, default 1000
+        Number of SVGs to find clusters.
 
-    n_gene_clusters : int, default 8
-        Number of gene clusters to find.
+    n_svg_clusters : int, default 8
+        Number of SVG clusters to find.
 
     Returns
     =======
@@ -31,12 +31,12 @@ def cluster(
         A Series of clustering result.
 
     """
-    selected_genes = AI_series.sort_values(ascending=False)[:n_genes].index
+    selected_genes = AI_series.sort_values(ascending=False)[:n_svgs].index
     hotspot_set = hotspot_df[selected_genes]
     gene_distmat = sch.distance.pdist(hotspot_set.T, metric="jaccard")
     Z_gene = sch.linkage(gene_distmat, method="ward")
     gene_result = pd.Series(
-        sch.fcluster(Z_gene, t=n_gene_clusters, criterion="maxclust"),
+        sch.fcluster(Z_gene, t=n_svg_clusters, criterion="maxclust"),
         index=selected_genes,
     ).sort_values()
     return gene_result

@@ -66,7 +66,7 @@ class STDataset(object):
         self._local_moran_p: Optional[pd.DataFrame] = None
         self._AI: Optional[pd.DataFrame] = None
         self._Di: Optional[pd.DataFrame] = None
-        self._gene_cluster: Optional[pd.Series] = None
+        self._svg_cluster: Optional[pd.Series] = None
 
         # dataframes check
         if isinstance(count_df, pd.DataFrame):
@@ -160,26 +160,26 @@ class STDataset(object):
 
     def find_clusters(
         self,
-        n_genes: int = 1000,
-        n_gene_clusters: int = 8,
+        n_svgs: int = 1000,
+        n_svg_clusters: int = 8,
     ) -> None:
         """
-        Find gene clusters.
+        Find SVG clusters.
 
         Parameters
         ==========
-        n_genes: int, default 1000
-            Number of genes to find clusters.
+        n_svgs: int, default 1000
+            Number of SVGs to find clusters.
 
-        n_gene_clusters: int, default 8
-            Number of gene clusters to find.
+        n_svg_clusters: int, default 8
+            Number of SVG clusters to find.
 
         """
-        self._gene_cluster = cluster.cluster(
+        self._svg_cluster = cluster.cluster(
             self._hotspot_df,
             self._AI,
-            n_genes=n_genes,
-            n_gene_clusters=n_gene_clusters,
+            n_svgs=n_svgs,
+            n_svg_clusters=n_svg_clusters,
         )
 
     def svg_heatmap(
@@ -204,7 +204,7 @@ class STDataset(object):
         return plot.svg_heatmap(
             self._hotspot_df,
             self._coordinate_df,
-            self._gene_cluster,
+            self._svg_cluster,
             he_image,
         )
 
@@ -272,9 +272,9 @@ class STDataset(object):
         return self._Di
 
     @property
-    def gene_cluster(self) -> pd.Series:
-        """Gene cluster result."""
-        return self._gene_cluster
+    def svg_cluster(self) -> pd.Series:
+        """SVG cluster result."""
+        return self._SVG_cluster
 
 
 if __name__ == "__main__":
