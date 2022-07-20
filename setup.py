@@ -21,6 +21,7 @@ setup(
     author_email="chengpeng@ynu.edu.cn",
     discription="Find spatial variable genes for Spatial Trasncriptomics data.",
     long_description=long_description,
+    long_description_content_type="text/markdown",
     url="https://github.com/CPenglab/svgbit",
     license="MIT",
     packages=find_packages(),

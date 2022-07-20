@@ -84,14 +84,15 @@ def main():
         cores=args.cores,
     )
 
-    d.hotspot_df.to_csv(Path.joinpath(args.savedir, "hotspot_df.csv"))
-    d.AI.to_csv(Path.joinpath(args.savedir, "AI.csv"))
-    d.Di.to_csv(Path.joinpath(args.savedir, "Di.csv"))
-    d.gene_cluster.to_csv(Path.joinpath(args.savedir, "svg_cluster.csv"))
+    savedir = Path(args.savedir)
+    d.hotspot_df.to_csv(Path.joinpath(savedir, "hotspot_df.csv"))
+    d.AI.to_csv(Path.joinpath(savedir, "AI.csv"))
+    d.Di.to_csv(Path.joinpath(savedir, "Di.csv"))
+    d.gene_cluster.to_csv(Path.joinpath(savedir, "svg_cluster.csv"))
 
     he_image = None if args.he_image is None else Image.open(args.he_image)
     fig, axes = d.svg_heatmap(he_image)
-    fig.savefig(Path.joinpath(args.savedir, "heatmap.jpg"))
+    fig.savefig(Path.joinpath(savedir, "heatmap.jpg"))
     he_image.close()
 
 
