@@ -91,9 +91,8 @@ def main():
     d.svg_cluster.to_csv(Path.joinpath(savedir, "svg_cluster.csv"))
 
     he_image = None if args.he_image is None else Image.open(args.he_image)
-    fig, axes = d.svg_heatmap(he_image)
-    fig.savefig(Path.joinpath(savedir, "heatmap.jpg"))
-    he_image.close()
+    d.svg_heatmap(Path.joinpath(savedir, "heatmap.jpg"), he_image)
+    None if he_image is None else he_image.close()
 
 
 if __name__ == "__main__":

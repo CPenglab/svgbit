@@ -184,6 +184,7 @@ class STDataset(object):
 
     def svg_heatmap(
         self,
+        save_path: Union[str, Path],
         he_image=None,
     ) -> Tuple[mpl.figure.Figure, np.ndarray[mpl.axes.Axes]]:
         """
@@ -191,20 +192,18 @@ class STDataset(object):
 
         Patameters
         ==========
+        save_path: str or pathlib.Path
+            Heatmap save path.
+
         he_image: PIL.Image.Image, default None
             H&E image of tissue. If None is given (default), distribution map
             will not show tissue picture.
-
-        Returns
-        =======
-        fig: matplotlib.figure.Figure
-        axes: numpy.ndarray[matplotlib.axes.Axes]
-
         """
-        return plot.svg_heatmap(
+        plot.svg_heatmap(
             self._hotspot_df,
             self._coordinate_df,
             self._svg_cluster,
+            save_path,
             he_image,
         )
 
