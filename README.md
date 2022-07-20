@@ -40,6 +40,7 @@ optional arguments:
   --n_genes N_GENES     number of genes to find clusters (default: 1000)
   --n_gene_clusters N_GENE_CLUSTERS
                         number of gene clusters to find (default: 8)
+  --he_image HE_IMAGE   path to H&E image. Only used for visualization (default: None)
   --savedir SAVEDIR     path to save results (default: .)
   --cores CORES         number of threads to run svgene (default: 8)
 ```
@@ -47,6 +48,9 @@ optional arguments:
 Follow the introduction and results will save to --savedir. 
 
 ### Python API
+svgene has a set of python API. You may run svgene through command line or python.
+We recommend the usage of python API for more feature and full control of your input
+data.
 
 #### Load data
 
@@ -68,7 +72,6 @@ data with `pandas`.
 (spot * gene) and (spot * 2). Specify `count_transpose` and `coordinate_transpose`
 as `True` when necessary. 
 
-
 #### Run svgene with one function
 
 ```python
@@ -76,10 +79,6 @@ svgene.run(dataset)
 ```
 
 Visit our API reference for further detail.
-
-#### Visualization
-
-#TODO: still under processing...
 
 ## API References
 
