@@ -274,7 +274,7 @@ class STDataset(object):
     @property
     def svg_cluster(self) -> pd.Series:
         """SVG cluster result."""
-        return self._SVG_cluster
+        return self._svg_cluster
 
 
 if __name__ == "__main__":
