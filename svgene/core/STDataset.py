@@ -155,6 +155,7 @@ class STDataset(object):
             hotspot_df=self._hotspot_df,
             weight_df=self._local_moran_p,
             knn=self._weight,
+            cores=cores,
         )
 
     def find_clusters(

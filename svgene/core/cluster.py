@@ -37,6 +37,6 @@ def cluster(
     Z_gene = sch.linkage(gene_distmat, method="ward")
     gene_result = pd.Series(
         sch.fcluster(Z_gene, t=n_gene_clusters, criterion="maxclust"),
-        index=hotspot_df.index,
+        index=selected_genes,
     ).sort_values()
     return gene_result

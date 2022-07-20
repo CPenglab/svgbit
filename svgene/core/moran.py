@@ -2,6 +2,7 @@ from functools import partial
 from multiprocessing import Pool, cpu_count
 from typing import Tuple
 
+import numba
 import pandas as pd
 from libpysal.weights import W as libpysal_W
 from pysal.explore import esda
@@ -103,11 +104,13 @@ def _local_moran(
         Local Moran's I p values.
 
     """
+    numba.config.THREADING_LAYER = "workqueue"
     gene_lisa = esda.moran.Moran_Local(
         gene_expression_df[gene],
         weights,
         transformation=transformation,
         permutations=permutation,
+        n_jobs=1,
     )
     # select the significant hotspots (p < 0.05)
     local_moran_hotspot = 1 * ((gene_lisa.p_sim < 0.05) & (gene_lisa.q == 1))
