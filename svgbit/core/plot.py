@@ -6,6 +6,7 @@ from typing import Union
 import matplotlib.pyplot as plt
 import pandas as pd
 from PIL import Image
+from scipy.cluster import hierarchy as sch
 
 
 def svg_heatmap(
@@ -83,8 +84,18 @@ def svg_heatmap(
     fig.colorbar(sc, cax=ax_cb)
     axes.append(ax_cb)
 
+    spot_distmat = sch.distance.pdist(hotspot_df, metric="jaccard")
+    Z_spot = sch.linkage(spot_distmat, method="ward")
+    spot_result = pd.Series(
+        sch.fcluster(Z_spot, t=8, criterion="maxclust"),
+        index=hotspot_df.index,
+    ).sort_values()
+
     ax_heatmap.imshow(
-        hotspot_df.reindex(columns=cluster_result.index),
+        hotspot_df.reindex(
+            index=spot_result.index,
+            columns=cluster_result.index,
+        ),
         cmap="Reds",
         aspect="auto",
     )
