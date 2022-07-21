@@ -43,7 +43,7 @@ def svg_heatmap(
     spacing, cluster_width = 0.03, 0.22
     rect_heatmap = [left + spacing, bottom + spacing * 2, width, height]
 
-    fig = plt.figure(figsize=(10, 10))
+    fig = plt.figure(figsize=(10, 10), dpi=200)
     ax_heatmap = fig.add_axes(rect_heatmap)
     axes = [ax_heatmap]
 
