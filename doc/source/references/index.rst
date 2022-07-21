@@ -26,6 +26,17 @@ Run svgbit within one function
 
 
 
+Visualization
+=============
+.. currentmodule:: svgbit
+.. autosummary::
+    :toctree: _autosummary
+    :recursive:
+
+    STDataset.svg_heatmap
+
+
+
 STDataset Methods
 =================
 .. currentmodule:: svgbit
@@ -53,7 +64,7 @@ STDataset Attributes
     STDataset.Di
     STDataset.coordinate_df
     STDataset.count_df
-    STDataset.gene_cluster
+    STDataset.svg_cluster
     STDataset.genes
     STDataset.hotspot_df
     STDataset.n_genes

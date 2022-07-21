@@ -46,6 +46,15 @@ after installation, and you may get a short help massage::
 
 Follow the introduction and results will save to --savedir.
 
+.. note::
+   svgbit will use all available CPUs as default. While python's child process
+   will inherit all resources from parent, this may consume much memory. Specify
+   ``cores`` keyword argument to avoid ``Cannot allocate memory`` error.
+
+.. note::
+   svgbit may consume ~35 Gib memory when running with a 2980 spots, 32285 genes
+   matrix with 8 cores.
+
 
 
 Python Interface
@@ -57,7 +66,12 @@ control of your input data.
 
 Run svgbit with one function
 ----------------------------
-Load data::
+svgbit could load data from Space Ranger output directory::
+
+    import svgbit
+    dataset = svgbit.load_10X("spaceranger_output/outs")
+
+Or load data from csv files::
     
     import svgbit
     dataset = svgbit.STDataset(
@@ -72,17 +86,29 @@ Load data::
 given, svgbit would try to load data with ``pandas``.
 
 .. note::
-    svgbit assume that the shape of count matrix and coordinate 
-    file is  (spot * gene) and (spot * 2). Specify ``count_transpose`` or
-    ``coordinate_transpose`` as ``True`` when necessary. 
+    When init STDataset instance in this way, svgbit assume that the shape 
+    of count matrix and coordinate file is  (spot * gene) and (spot * 2). 
+    Specify ``count_transpose`` or ``coordinate_transpose`` as ``True`` 
+    when necessary. 
 
 After data loading, run::
 
     svgbit.run(dataset)
 
-to perform full pipeline of svgbit. Results will save as attributes of ``dataset``.
+to perform full pipeline of svgbit. Results will save as attributes of
+``dataset``.
 
 Visit our :any:`API references <../references/index>` for further detail.
+
+
+Visualization
+-------------
+Draw SVG heatmap with::
+
+    dataset.svg_heatmap(save_path="heatmap.jpg", he_image="he_image.jpg")
+
+Parameter ``he_image`` is optional. If not specified, hotspot discription
+map will show without morphological information.
 
 
 Details about svgbit.run()
@@ -129,6 +155,15 @@ and save to ``AI`` and ``Di`` attribute as ``pd.Series``.
 
 Find SVG clusters
 :::::::::::::::::
+
+SVG clusters is estimated by::
+
+    dataset.find_clusters()
+
+and save to ``svg_cluster`` attribute.
+
+For further discription of hotspot, AI, Di and SVG cluster, please refer to
+our manuscript.
 
 
 
