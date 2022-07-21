@@ -33,7 +33,7 @@ Visualization
     :toctree: _autosummary
     :recursive:
 
-    STDataset.svg_heatmap
+    svg_heatmap
 
 
 

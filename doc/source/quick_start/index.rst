@@ -105,7 +105,7 @@ Visualization
 -------------
 Draw SVG heatmap with::
 
-    dataset.svg_heatmap(save_path="heatmap.jpg", he_image="he_image.jpg")
+    svgbit.svg_heatmap(dataset, save_path="heatmap.jpg", he_image="he_image.jpg")
 
 Parameter ``he_image`` is optional. If not specified, hotspot discription
 map will show without morphological information.

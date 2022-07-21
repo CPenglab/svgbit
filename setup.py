@@ -29,8 +29,9 @@ setup(
     install_requires=[
         "setuptools",
         "matplotlib>=3.5.1",
-        "pysal>=2.4.0",
         "pandana>=0.6.1",
+        "pysal>=2.4.0",
+        "pillow>=9.2.0",
     ],
     entry_points={'console_scripts': [
         'svgbit = svgbit.__main__:main',

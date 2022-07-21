@@ -7,6 +7,7 @@ from PIL import Image
 
 from svgbit import STDataset
 from svgbit import run
+from svgbit import svg_heatmap
 
 
 def main():
@@ -91,7 +92,7 @@ def main():
     d.svg_cluster.to_csv(Path.joinpath(savedir, "svg_cluster.csv"))
 
     he_image = None if args.he_image is None else Image.open(args.he_image)
-    d.svg_heatmap(Path.joinpath(savedir, "heatmap.jpg"), he_image)
+    svg_heatmap(d, Path.joinpath(savedir, "heatmap.jpg"), he_image)
     None if he_image is None else he_image.close()
 
 

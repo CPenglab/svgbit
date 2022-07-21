@@ -1,6 +1,5 @@
 from .api import STDataset
-from .api import run
-from .api import load_10X
+from .api import load_10X, run, svg_heatmap
 from ._version import __version__
 
-__all__ = ["STDataset", "run", "load_10X"]
+__all__ = ["STDataset", "run", "load_10X", "svg_heatmap"]

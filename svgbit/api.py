@@ -1,7 +1,12 @@
 from multiprocessing import cpu_count
+from pathlib import Path
+from typing import Optional, Union
+
+from PIL import Image
 
 from .core.STDataset import STDataset
 from .core.io import load_10X
+from .core.plot import _svg_heatmap
 
 
 def run(
@@ -43,3 +48,32 @@ def run(
     dataset.find_clusters(n_svgs=n_svgs, n_svg_clusters=n_svg_clusters)
 
     return dataset
+
+
+def svg_heatmap(
+    dataset: STDataset,
+    save_path: Union[str, Path],
+    he_image: Optional[Image.Image] = None,
+) -> None:
+    """
+    Draw SVG distribution heatmap.
+
+    Patameters
+    ==========
+    dataset: STDataset
+        A STDataset with hotspot and SVG cluster estimation finished.
+
+    save_path: str or pathlib.Path
+        Heatmap save path.
+
+    he_image: PIL.Image.Image, default None
+        H&E image of tissue. If None is given (default), distribution map
+        will not show tissue picture.
+    """
+    _svg_heatmap(
+        dataset.hotspot_df,
+        dataset.coordinate_df,
+        dataset.svg_cluster,
+        save_path,
+        he_image,
+    )

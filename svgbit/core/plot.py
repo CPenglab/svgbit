@@ -9,7 +9,7 @@ from PIL import Image
 from scipy.cluster import hierarchy as sch
 
 
-def svg_heatmap(
+def _svg_heatmap(
     hotspot_df: pd.DataFrame,
     coordinate_df: pd.DataFrame,
     cluster_result: pd.Series,

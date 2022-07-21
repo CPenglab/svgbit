@@ -2,7 +2,7 @@ import gzip
 from pathlib import Path
 
 import pandas as pd
-import scipy
+import scipy.io
 from .STDataset import STDataset
 
 
