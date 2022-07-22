@@ -26,16 +26,16 @@ def run(
     dataset : STDataset
         A STDataset for running svgbit.
 
-    k: int, default 6
+    k : int, default 6
         Number of nearest neighbors for KNN network.
 
-    n_svgs: int, default 1000
+    n_svgs : int, default 1000
         Number of SVGs to find clusters.
 
-    n_svg_clusters: int, default 8
+    n_svg_clusters : int, default 8
         Number of SVG clusters to find.
 
-    cores: int
+    cores : int
         Number of threads to run svgbit. Use all available cpus by default.
 
     Returns
@@ -62,13 +62,13 @@ def svg_heatmap(
 
     Patameters
     ==========
-    dataset: STDataset
+    dataset : STDataset
         A STDataset with hotspot and SVG cluster estimation finished.
 
-    save_path: str or pathlib.Path
+    save_path : str or pathlib.Path
         Heatmap save path.
 
-    he_image: PIL.Image.Image, default None
+    he_image : PIL.Image.Image, default None
         H&E image of tissue. If None is given (default), distribution map
         will not show tissue picture.
     """
