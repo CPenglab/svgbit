@@ -1,4 +1,7 @@
 from __future__ import annotations
+
+import sys
+import warnings
 from typing import Optional, Tuple, Union
 from pathlib import Path
 
@@ -11,6 +14,10 @@ from libpysal.weights import W as libpysal_W
 from . import cluster, density, moran, plot
 
 DataFrames = Union[pd.DataFrame, np.ndarray, Path, str]
+if not sys.warnoptions:
+    import os
+    warnings.simplefilter("default")  # Change the filter in this process
+    os.environ["PYTHONWARNINGS"] = "default"  # Also affect subprocesses
 
 
 class STDataset(object):
@@ -98,6 +105,19 @@ class STDataset(object):
         assert self._count_df.shape[0] == self._coordinate_df.shape[0], err
         err = "Spots' name mismatch!"
         assert all(self._count_df.index == self._coordinate_df.index), err
+
+        # Rename duplicated columns
+        cols = pd.Series(self._count_df.columns)
+        dups = self._count_df.columns[self._count_df.columns.duplicated(
+            keep=False)]
+        for dup in dups:
+            cols[self._count_df.columns.get_loc(dup)] = ([
+                dup + '.' + str(d_idx) if d_idx != 0 else dup
+                for d_idx in range(self._count_df.columns.get_loc(dup).sum())
+            ])
+        if len(dups) > 0:
+            warnings.warn("Duplicated column names found. Auto rename.")
+            self._count_df.columns = cols
 
     def acquire_weight(self, k: int = 6, **kwargs) -> None:
         """
