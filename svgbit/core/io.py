@@ -14,14 +14,14 @@ def load_10X(read_dir) -> STDataset:
 
     Patameters
     ==========
-    read_dir: str or pathlib.Path
+    read_dir : str or pathlib.Path
         A location points to 10X outs dir. Assume the directories
         ``filtered_feature_bc_matrix`` and ``spatial`` are in this
         path.
 
     Returns
     =======
-    dataset: STDataset
+    dataset : STDataset
         A STDataset instance generated from read_dir.
     """
     read_dir = Path(read_dir)

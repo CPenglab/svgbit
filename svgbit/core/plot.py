@@ -22,19 +22,19 @@ def _svg_heatmap(
 
     Patameters
     ==========
-    hotspot_df: pd.DataFrame
+    hotspot_df : pd.DataFrame
         A pd.DataFrame for hotspots.
 
-    coordinate_df: pd.DataFrame
+    coordinate_df : pd.DataFrame
         A pd.DataFrame for coordinate files.
 
-    cluster_result: pd.Series
+    cluster_result : pd.Series
         A pd.Series for cluster result.
 
-    save_path: str or pathlib.Path
+    save_path : str or pathlib.Path
         Heatmap save path.
 
-    he_image: PIL.Image.Image, default None
+    he_image : PIL.Image.Image, default None
         H&E image of tissue. If None is given (default), distribution map
         will not show tissue picture.
     """
