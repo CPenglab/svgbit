@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 from math import ceil
 from pathlib import Path
 from typing import Union
@@ -43,7 +44,7 @@ def _svg_heatmap(
     spacing, cluster_width = 0.03, 0.22
     rect_heatmap = [left + spacing, bottom + spacing * 2, width, height]
 
-    fig = plt.figure(figsize=(10, 10), dpi=200)
+    fig = plt.figure(figsize=(10, 10), dpi=300)
     ax_heatmap = fig.add_axes(rect_heatmap)
     axes = [ax_heatmap]
 
@@ -55,7 +56,7 @@ def _svg_heatmap(
             cluster_width,
         ]
         ax_cluster = fig.add_axes(rect_cluster)
-        ax_cluster.set_title(f"Cluster {j} hotspot mean")
+        ax_cluster.set_title(f"Cluster {j} hotspot distribution")
         ax_cluster.set_xticks([])
         ax_cluster.set_yticks([])
         ax_cluster.imshow(he_image) if he_image is not None else None
@@ -99,6 +100,11 @@ def _svg_heatmap(
         cmap="Reds",
         aspect="auto",
     )
+
+    flag = 0
+    for i in range(1, len(set(cluster_result.values))):
+        flag += len(cluster_result[cluster_result == i])
+        ax_heatmap.plot([flag, flag], [0, hotspot_df.shape[0] - 5])
 
     ax_heatmap.set_xticks([])
     ax_heatmap.set_yticks([])

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import pandas as pd
 from scipy.cluster import hierarchy as sch
 

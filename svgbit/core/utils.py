@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import pandas as pd
 from libpysal.weights import W as libpysal_W
 

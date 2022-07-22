@@ -10,7 +10,7 @@ from svgbit import run
 from svgbit import svg_heatmap
 
 
-def main():
+def main() -> None:
     parser = ArgumentParser(
         prog="svgbit",
         description="Find spatial variable genes for Spatial Trasncriptomics data.",
