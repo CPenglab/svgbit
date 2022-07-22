@@ -65,7 +65,7 @@ def _hotspot_AI(
         hi_wnn_df = pd.DataFrame(knn[i], columns=[i])
         hi_wnn_df = pd.DataFrame(hi_wnn_df[hi_wnn_df[i] == 1])
         knn_coors = hi_wnn_df.index.tolist()
-        inter_spots = set(hotspots).intersection(set(knn_coors))
+        inter_spots = list(set(hotspots).intersection(set(knn_coors)))
         hs[i] = ((weight_df[gene][inter_spots] /
                   weight_df[gene][knn_coors].sum()).sum())
 
