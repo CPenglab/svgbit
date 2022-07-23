@@ -48,7 +48,7 @@ def load_10X(read_dir) -> STDataset:
         scipy.io.mmread(mtx_path),
         index=gene_name,
         columns=spot_name,
-    ).T
+    ).T.sparse.to_dense()
     coor_df = pd.read_csv(position_path, index_col=0, header=None)
     coor_df = coor_df[[5, 4]]
     coor_df.index.name = "barcode"
