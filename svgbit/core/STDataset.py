@@ -107,17 +107,19 @@ class STDataset(object):
         assert all(self._count_df.index == self._coordinate_df.index), err
 
         # Rename duplicated columns
-        cols = pd.Series(self._count_df.columns)
-        dups = self._count_df.columns[self._count_df.columns.duplicated(
-            keep=False)]
-        for dup in dups:
-            cols[self._count_df.columns.get_loc(dup)] = ([
-                dup + '.' + str(d_idx) if d_idx != 0 else dup
-                for d_idx in range(self._count_df.columns.get_loc(dup).sum())
-            ])
-        if len(dups) > 0:
+        genes = []
+        flag = 0
+        for gene_name in self._count_df.columns:
+            while 1:
+                if gene_name in genes:
+                    gene_name += "*"
+                    flag += 1
+                else:
+                    break
+            genes.append(gene_name)
+        if flag:
+            self._count_df.columns = genes
             warnings.warn("Duplicated column names found. Auto rename.")
-            self._count_df.columns = cols
 
     def acquire_weight(self, k: int = 6, **kwargs) -> None:
         """
