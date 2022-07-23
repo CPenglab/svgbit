@@ -7,7 +7,6 @@ from typing import Optional, Union
 from PIL import Image
 
 from .core.STDataset import STDataset
-from .core.io import load_10X
 from .core.plot import _svg_heatmap
 
 
