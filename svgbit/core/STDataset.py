@@ -121,6 +121,18 @@ class STDataset(object):
             self._count_df.columns = genes
             warnings.warn("Duplicated column names found. Auto rename.")
 
+    def __del__(self) -> None:
+        del self._count_df
+        del self._coordinate_df
+        del self._hotspot_df
+        del self._weight
+        del self._weight_type
+        del self._local_moran_i
+        del self._local_moran_p
+        del self._AI
+        del self._Di
+        del self._svg_cluster
+
     def acquire_weight(self, k: int = 6, **kwargs) -> None:
         """
         Acquire weight for analysis.
