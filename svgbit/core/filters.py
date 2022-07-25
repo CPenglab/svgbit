@@ -5,7 +5,7 @@ import pandas as pd
 from .STDataset import STDataset
 
 
-def low_variance_filter(dataset: STDataset, var: int = 0) -> STDataset:
+def low_variance_filter(dataset: STDataset, var: float = 0) -> STDataset:
     """
     Filter genes with low variance. This may also filter genes with 0 expressions.
 
@@ -30,12 +30,15 @@ def low_variance_filter(dataset: STDataset, var: int = 0) -> STDataset:
     )
 
 
-def high_expression_filter(dataset: STDataset) -> STDataset:
+def high_expression_filter(
+    dataset: STDataset,
+    max_ratio: float = 0.95,
+) -> STDataset:
     temp_df = dataset.count_df.where(dataset.count_df < 1, 1)
     temp_series = temp_df.sum() / temp_df.shape[0]
     drop_genes = []
     for i in temp_series.index:
-        if temp_series[i] > 0.95:
+        if temp_series[i] > max_ratio:
             drop_genes.append(i)
     count_df = dataset.count_df.drop(columns=drop_genes)
     return STDataset(count_df, dataset.coordinate_df)
