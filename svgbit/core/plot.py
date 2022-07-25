@@ -46,7 +46,6 @@ def _svg_heatmap(
 
     fig = plt.figure(figsize=(10, 10), dpi=300)
     ax_heatmap = fig.add_axes(rect_heatmap)
-    axes = [ax_heatmap]
 
     for i, j in enumerate(set(cluster_result.values)):
         rect_cluster = [
@@ -72,7 +71,6 @@ def _svg_heatmap(
             s=4,
             alpha=0.7,
         )
-        axes.append(ax_cluster)
 
     ii = ceil(len(set(cluster_result.values)) / 3)
     rect_cb = [
@@ -83,7 +81,6 @@ def _svg_heatmap(
     ]
     ax_cb = fig.add_axes(rect_cb)
     fig.colorbar(sc, cax=ax_cb)
-    axes.append(ax_cb)
 
     spot_distmat = sch.distance.pdist(hotspot_df, metric="jaccard")
     Z_spot = sch.linkage(spot_distmat, method="ward")
