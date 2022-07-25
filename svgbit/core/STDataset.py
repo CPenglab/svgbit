@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from copy import deepcopy
 import sys
 import warnings
 from typing import Optional, Tuple, Union
@@ -77,7 +78,7 @@ class STDataset(object):
 
         # dataframes check
         if isinstance(count_df, pd.DataFrame):
-            self._count_df = count_df
+            self._count_df = deepcopy(count_df)
         elif isinstance(count_df, np.ndarray):
             self._count_df = pd.DataFrame(count_df)
         else:
@@ -86,7 +87,7 @@ class STDataset(object):
             self._count_df = self._count_df.T
 
         if isinstance(coordinate_df, pd.DataFrame):
-            self._coordinate_df = coordinate_df
+            self._coordinate_df = deepcopy(coordinate_df)
         elif isinstance(coordinate_df, np.ndarray):
             self._coordinate_df = pd.DataFrame(coordinate_df)
         else:
