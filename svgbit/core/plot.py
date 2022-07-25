@@ -112,3 +112,4 @@ def _svg_heatmap(
     ax_heatmap.set_ylabel("Spots")
 
     fig.savefig(save_path, bbox_inches="tight")
+    plt.close(fig)
