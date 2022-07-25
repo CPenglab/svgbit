@@ -3,8 +3,6 @@ from argparse import ArgumentParser
 from multiprocessing import cpu_count
 from pathlib import Path
 
-from PIL import Image
-
 from svgbit import STDataset
 from svgbit import run
 from svgbit import svg_heatmap
@@ -91,9 +89,7 @@ def main() -> None:
     d.Di.to_csv(Path.joinpath(savedir, "Di.csv"))
     d.svg_cluster.to_csv(Path.joinpath(savedir, "svg_cluster.csv"))
 
-    he_image = None if args.he_image is None else Image.open(args.he_image)
-    svg_heatmap(d, Path.joinpath(savedir, "heatmap.jpg"), he_image)
-    None if he_image is None else he_image.close()
+    svg_heatmap(d, Path.joinpath(savedir, "heatmap.jpg"), args.he_image)
 
 
 if __name__ == "__main__":

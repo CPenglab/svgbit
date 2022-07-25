@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from math import ceil
 from pathlib import Path
-from typing import Union
+from typing import Optional, Union
 
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -15,7 +15,7 @@ def _svg_heatmap(
     coordinate_df: pd.DataFrame,
     cluster_result: pd.Series,
     save_path: Union[str, Path],
-    he_image: Image.Image = None,
+    he_image: Optional[Union[str, Path]] = None,
 ) -> None:
     """
     Draw SVG distribution heatmap.
@@ -34,7 +34,7 @@ def _svg_heatmap(
     save_path : str or pathlib.Path
         Heatmap save path.
 
-    he_image : PIL.Image.Image, default None
+    he_image : str or pathlib.Path, default None
         H&E image of tissue. If None is given (default), distribution map
         will not show tissue picture.
     """
@@ -46,6 +46,9 @@ def _svg_heatmap(
 
     fig = plt.figure(figsize=(10, 10), dpi=300)
     ax_heatmap = fig.add_axes(rect_heatmap)
+
+    if he_image is not None:
+        he_image = Image.open(he_image)
 
     for i, j in enumerate(set(cluster_result.values)):
         rect_cluster = [
@@ -110,3 +113,4 @@ def _svg_heatmap(
 
     fig.savefig(save_path, bbox_inches="tight")
     plt.close(fig)
+    he_image.close()

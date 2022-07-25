@@ -4,8 +4,6 @@ from multiprocessing import cpu_count
 from pathlib import Path
 from typing import Optional, Union
 
-from PIL import Image
-
 from .core.STDataset import STDataset
 from .core.plot import _svg_heatmap
 
@@ -54,7 +52,7 @@ def run(
 def svg_heatmap(
     dataset: STDataset,
     save_path: Union[str, Path],
-    he_image: Optional[Image.Image] = None,
+    he_image: Optional[Union[str, Path]] = None,
 ) -> None:
     """
     Draw SVG distribution heatmap.
@@ -67,7 +65,7 @@ def svg_heatmap(
     save_path : str or pathlib.Path
         Heatmap save path.
 
-    he_image : PIL.Image.Image, default None
+    he_image : str or pathlib.Path, default None
         H&E image of tissue. If None is given (default), distribution map
         will not show tissue picture.
     """

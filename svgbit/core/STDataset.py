@@ -6,13 +6,12 @@ import warnings
 from typing import Optional, Tuple, Union
 from pathlib import Path
 
-import matplotlib as mpl
 import numpy as np
 import pandas as pd
 from libpysal.weights import KNN
 from libpysal.weights import W as libpysal_W
 
-from . import cluster, density, moran, plot
+from . import cluster, density, moran
 
 DataFrames = Union[pd.DataFrame, np.ndarray, Path, str]
 if not sys.warnoptions:
@@ -215,31 +214,6 @@ class STDataset(object):
             self._AI,
             n_svgs=n_svgs,
             n_svg_clusters=n_svg_clusters,
-        )
-
-    def svg_heatmap(
-        self,
-        save_path: Union[str, Path],
-        he_image=None,
-    ) -> Tuple[mpl.figure.Figure, np.ndarray[mpl.axes.Axes]]:
-        """
-        Draw SVG distribution heatmap.
-
-        Patameters
-        ==========
-        save_path : str or pathlib.Path
-            Heatmap save path.
-
-        he_image : PIL.Image.Image, default None
-            H&E image of tissue. If None is given (default), distribution map
-            will not show tissue picture.
-        """
-        plot.svg_heatmap(
-            self._hotspot_df,
-            self._coordinate_df,
-            self._svg_cluster,
-            save_path,
-            he_image,
         )
 
     @property
