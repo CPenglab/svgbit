@@ -42,3 +42,14 @@ def high_expression_filter(
             drop_genes.append(i)
     count_df = dataset.count_df.drop(columns=drop_genes)
     return STDataset(count_df, dataset.coordinate_df)
+
+
+def quantile_filter(
+    dataset: STDataset,
+    quantile: float = 0.95
+) -> STDataset:
+    mean_series = dataset.count_df.mean()
+    q = mean_series.quantile(quantile)
+    drop_genes = mean_series[mean_series > q].index
+    count_df = dataset.count_df.reindex(index=drop_genes)
+    return STDataset(count_df, dataset.coordinate_df)
