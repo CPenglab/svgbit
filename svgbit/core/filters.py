@@ -50,6 +50,6 @@ def quantile_filter(
 ) -> STDataset:
     mean_series = dataset.count_df.mean()
     q = mean_series.quantile(quantile)
-    drop_genes = mean_series[mean_series > q].index
+    drop_genes = mean_series[mean_series < q].index
     count_df = dataset.count_df.reindex(columns=drop_genes)
     return STDataset(count_df, dataset.coordinate_df)
