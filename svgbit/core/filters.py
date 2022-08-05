@@ -34,6 +34,23 @@ def high_expression_filter(
     dataset: STDataset,
     max_ratio: float = 0.95,
 ) -> STDataset:
+    """
+    Filter genes with high expression ratio.
+
+    Parameters
+    ==========
+    dataset : STDataset
+        STDataset to be filtered.
+
+    max_ratio : int, default 0.95
+        Only remain genes with expression ratio less than (but not equal to)
+        max_ratio.
+
+    Returns
+    =======
+    dataset : STDataset
+        A STDataset instance with filtered genes.
+    """
     temp_df = dataset.count_df.where(dataset.count_df < 1, 1)
     temp_series = temp_df.sum() / temp_df.shape[0]
     drop_genes = []
@@ -48,6 +65,22 @@ def quantile_filter(
     dataset: STDataset,
     quantile: float = 0.95
 ) -> STDataset:
+    """
+    Filter genes with quantile.
+
+    Parameters
+    ==========
+    dataset : STDataset
+        STDataset to be filtered.
+
+    quantile : int, default 0.95
+        Only remain genes with mean less than (but not equal to) quantile number.
+
+    Returns
+    =======
+    dataset : STDataset
+        A STDataset instance with filtered genes.
+    """
     mean_series = dataset.count_df.mean()
     q = mean_series.quantile(quantile)
     drop_genes = mean_series[mean_series < q].index

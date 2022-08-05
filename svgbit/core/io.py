@@ -12,7 +12,7 @@ def load_10X(read_dir) -> STDataset:
     """
     Load 10X Genomics Space Ranger outputs and generate STDataset.
 
-    Patameters
+    Parameters
     ==========
     read_dir : str or pathlib.Path
         A location points to 10X outs dir. Assume the directories

@@ -12,6 +12,7 @@ STDataset
     :recursive:
 
     STDataset
+    load_10X
 
 
 
@@ -23,6 +24,19 @@ Run svgbit within one function
     :recursive:
 
     run
+
+
+
+Filters
+=======
+.. currentmodule:: svgbit
+.. autosummary::
+    :toctree: _autosummary
+    :recursive:
+
+    filters.low_variance_filter
+    filters.high_expression_filter
+    filters.quantile_filter
 
 
 
@@ -48,7 +62,6 @@ STDataset Methods
     STDataset.acquire_hotspot
     STDataset.acquire_density
     STDataset.find_clusters
-    STDataset.svg_heatmap
 
 
 
