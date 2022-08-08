@@ -11,7 +11,7 @@ else:
     raise RuntimeError("Unable to find version string in %s." %
                        (VERSIONFILE, ))
 
-with open("README.md", "r") as fh:
+with open("README.rst", "r") as fh:
     long_description = fh.read()
 
 setup(
@@ -21,7 +21,6 @@ setup(
     author_email="chengpeng@ynu.edu.cn",
     discription="Find spatial variable genes for Spatial Trasncriptomics data.",
     long_description=long_description,
-    long_description_content_type="text/markdown",
     url="https://github.com/CPenglab/svgbit",
     license="MIT",
     packages=find_packages(),
