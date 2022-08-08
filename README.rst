@@ -98,7 +98,7 @@ After data loading, run::
 to perform full pipeline of svgbit. Results will save as attributes of
 ``dataset``.
 
-Visit our :any:`API references <../references/index>` for further detail.
+Visit our API references for further detail.
 
 
 Visualization
