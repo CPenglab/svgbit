@@ -187,7 +187,7 @@ class STDataset(object):
             self.acquire_hotspot()
         self._AI, self._Di = density.hotspot_AI(
             hotspot_df=self._hotspot_df,
-            weight_df=self._local_moran_p,
+            weight_df=-np.log(self._local_moran_p),
             knn=self._weight,
             cores=cores,
         )
