@@ -9,6 +9,7 @@ def cluster(
     AI_series: pd.Series,
     n_svgs: int = 1000,
     n_svg_clusters: int = 8,
+    threshold: float = 0.3,
 ) -> pd.Series:
     """
     Cluster SVGs using hotspot matrix.
@@ -27,6 +28,9 @@ def cluster(
     n_svg_clusters : int, default 8
         Number of SVG clusters to find.
 
+    threshold : float, dafault 0.3
+        min value to identify multiple svg clusters to spot.
+
     Returns
     =======
     gene_result : pd.Series
@@ -41,4 +45,26 @@ def cluster(
         sch.fcluster(Z_gene, t=n_svg_clusters, criterion="maxclust"),
         index=selected_genes,
     ).sort_values()
-    return gene_result
+
+    mean_df = pd.DataFrame(index=hotspot_df.index)
+    for i in range(1, n_svg_clusters + 1):
+        genes = gene_result[gene_result == i].index
+        mean_df[i] = hotspot_df[genes].T.mean()
+
+    columns = ["spot_type"]
+    [columns.append(f"type_{i}") for i in range(1, 1 + n_svg_clusters)]
+    type_df = pd.DataFrame(columns=columns)
+    for spot in mean_df.index:
+        temp_df = pd.DataFrame(index=[spot], columns=columns)
+        sort_series = mean_df.loc[spot, :].sort_values(ascending=False)
+        n_multi = len(sort_series[sort_series > threshold])
+        spot_type = "singlet"
+        if sort_series.iloc[0] < 0.2:
+            spot_type = "uncertain"
+        if n_multi > 1:
+            spot_type = f"{n_multi}_multi_types"
+        temp_df.loc[spot, "spot_type"] = spot_type
+        temp_df.loc[spot, columns[1:]] = sort_series.index
+        type_df = pd.concat([type_df, temp_df])
+
+    return gene_result, type_df

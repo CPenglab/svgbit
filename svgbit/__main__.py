@@ -3,78 +3,63 @@ from argparse import ArgumentParser
 from multiprocessing import cpu_count
 from pathlib import Path
 
-from svgbit import STDataset
-from svgbit import run
-from svgbit import svg_heatmap
+from svgbit import load_10X, run, plot
+from svgbit.filters import low_variance_filter
+from svgbit.normalizers import logcpm_normalizer
 
 
 def main() -> None:
     parser = ArgumentParser(
         prog="svgbit",
-        description="Find spatial variable genes for Spatial Trasncriptomics data.",
+        description='''Find spatial variable genes for Spatial Trasncriptomics
+        data.''',
     )
     parser.add_argument(
-        "count",
-        help="path to count matrix file (shape: (spot * gene))",
-    )
-    parser.add_argument(
-        "coordinate",
-        help="path to coordinate file (shape: (spot * 2))",
-    )
-    parser.add_argument(
-        "--count_transpose",
-        action="store_true",
-        help="transpose count matrix if specified",
-    )
-    parser.add_argument(
-        "--coordinate_transpose",
-        action="store_true",
-        help="transpose coordinate file if specified",
+        "read_dir",
+        help='''a location points to 10X outs dir. Assume directories
+            ``filtered_feature_bc_matrix`` and ``spatial`` are in this path.''',
     )
     parser.add_argument(
         "--k",
         type=int,
         default=6,
-        help="number of nearest neighbors for KNN network (default: %(default)s)",
+        help='''number of nearest neighbors for KNN network
+        (default: %(default)s)''',
     )
     parser.add_argument(
         "--n_svgs",
         type=int,
         default=1000,
-        help="number of SVGs to find clusters (default: %(default)s)",
+        help='''number of SVGs to find clusters (default: %(default)s)''',
     )
     parser.add_argument(
         "--n_svg_clusters",
         type=int,
         default=8,
-        help="number of SVG clusters to find (default: %(default)s)",
+        help='''number of SVG clusters to find (default: %(default)s)''',
     )
     parser.add_argument(
         "--he_image",
         default=None,
-        help="path to H&E image. Only used for visualization (default: %(default)s)",
+        help='''path to H&E image. Only used for visualization
+        (default: %(default)s)''',
     )
     parser.add_argument(
         "--savedir",
         default=".",
-        help="path to save results (default: %(default)s)",
+        help='''path to save results (default: %(default)s)''',
     )
     parser.add_argument(
         "--cores",
         type=int,
         default=cpu_count(),
-        help="number of threads to run svgbit (default: %(default)s)",
+        help='''number of threads to run svgbit (default: %(default)s)''',
     )
     args = parser.parse_args()
 
-    d = STDataset(
-        args.count,
-        args.coordinate,
-        count_transpose=args.count_transpose,
-        coordinate_transpose=args.coordinate_transpose,
-        count_df_kwargs={"index_col": 0, "header": 0},
-        coordinate_df_kwargs={"index_col": 0, "header": 0},
-    )
+    d = load_10X(args.read_dir)
+    d = low_variance_filter(d)
+    d = logcpm_normalizer(d)
     d = run(
         d,
         k=args.k,
@@ -89,7 +74,8 @@ def main() -> None:
     d.Di.to_csv(Path.joinpath(savedir, "Di.csv"))
     d.svg_cluster.to_csv(Path.joinpath(savedir, "svg_cluster.csv"))
 
-    svg_heatmap(d, Path.joinpath(savedir, "heatmap.jpg"), args.he_image)
+    plot.svg_heatmap(d, Path.joinpath(savedir, "heatmap.jpg"), args.he_image)
+    plot.spot_type_map(d, Path.joinpath(savedir, "type_map.jpg"), args.he_image)
 
 
 if __name__ == "__main__":

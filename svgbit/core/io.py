@@ -15,7 +15,7 @@ def load_10X(read_dir) -> STDataset:
     Parameters
     ==========
     read_dir : str or pathlib.Path
-        A location points to 10X outs dir. Assume the directories
+        A location points to 10X outs dir. Assume directories
         ``filtered_feature_bc_matrix`` and ``spatial`` are in this
         path.
 

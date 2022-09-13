@@ -74,6 +74,7 @@ class STDataset(object):
         self._AI: Optional[pd.DataFrame] = None
         self._Di: Optional[pd.DataFrame] = None
         self._svg_cluster: Optional[pd.Series] = None
+        self._spot_type: Optional[pd.DataFrame] = None
 
         # dataframes check
         if isinstance(count_df, pd.DataFrame):
@@ -132,6 +133,7 @@ class STDataset(object):
         del self._AI
         del self._Di
         del self._svg_cluster
+        del self._spot_type
 
     def acquire_weight(self, k: int = 6, **kwargs) -> None:
         """
@@ -196,6 +198,7 @@ class STDataset(object):
         self,
         n_svgs: int = 1000,
         n_svg_clusters: int = 8,
+        threshold: float = 0.3,
     ) -> None:
         """
         Find SVG clusters.
@@ -208,12 +211,16 @@ class STDataset(object):
         n_svg_clusters : int, default 8
             Number of SVG clusters to find.
 
+        threshold : float, dafault 0.3
+            min value to identify multiple svg clusters to spot.
+
         """
-        self._svg_cluster = cluster.cluster(
+        self._svg_cluster, self._spot_type = cluster.cluster(
             self._hotspot_df,
             self._AI,
             n_svgs=n_svgs,
             n_svg_clusters=n_svg_clusters,
+            threshold=threshold,
         )
 
     @property
@@ -283,6 +290,11 @@ class STDataset(object):
     def svg_cluster(self) -> pd.Series:
         """SVG cluster result."""
         return self._svg_cluster
+
+    @property
+    def spot_type(self) -> pd.DataFrame:
+        """A pd.DataFrame for spot type."""
+        return self._spot_type
 
 
 if __name__ == "__main__":

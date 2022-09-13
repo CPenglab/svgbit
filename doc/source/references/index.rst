@@ -40,6 +40,18 @@ Filters
 
 
 
+Normalizers
+===========
+.. currentmodule:: svgbit
+.. autosummary::
+    :toctree: _autosummary
+    :recursive:
+
+    normalizers.logcpm_normalizer
+    normalizers.cpm_normalizer
+
+
+
 Visualization
 =============
 .. currentmodule:: svgbit
@@ -47,7 +59,8 @@ Visualization
     :toctree: _autosummary
     :recursive:
 
-    svg_heatmap
+    plot.svg_heatmap
+    plot.spot_type_map
 
 
 
@@ -78,6 +91,7 @@ STDataset Attributes
     STDataset.coordinate_df
     STDataset.count_df
     STDataset.svg_cluster
+    STDataset.spot_type
     STDataset.genes
     STDataset.hotspot_df
     STDataset.n_genes
@@ -89,8 +103,8 @@ STDataset Attributes
 
 
 
-Functions not recommended use directly
-======================================
+Inner functions, not recommended use directly
+=============================================
 .. currentmodule:: svgbit
 .. autosummary::
     :toctree: _autosummary

@@ -1,9 +1,16 @@
-from .api import STDataset
-from .api import run, svg_heatmap
+from .core.STDataset import STDataset
+from .run import run
 
 from .core.io import load_10X
-from . import filters, normalizers
+from . import filters, normalizers, plot
 
 from ._version import __version__
 
-__all__ = ["STDataset", "run", "load_10X", "svg_heatmap", "filters", "normalizers"]
+__all__ = [
+    "STDataset",
+    "run",
+    "load_10X",
+    "filters",
+    "normalizers",
+    "plot",
+]
