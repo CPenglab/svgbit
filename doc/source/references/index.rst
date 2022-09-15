@@ -10,6 +10,7 @@ STDataset
 .. autosummary::
     :toctree: _autosummary
     :recursive:
+    :maxdepth: 5
 
     STDataset
     load_10X
@@ -22,6 +23,7 @@ Run svgbit within one function
 .. autosummary::
     :toctree: _autosummary
     :recursive:
+    :maxdepth: 5
 
     run
 
@@ -33,6 +35,7 @@ Filters
 .. autosummary::
     :toctree: _autosummary
     :recursive:
+    :maxdepth: 5
 
     filters.low_variance_filter
     filters.high_expression_filter
@@ -46,6 +49,7 @@ Normalizers
 .. autosummary::
     :toctree: _autosummary
     :recursive:
+    :maxdepth: 5
 
     normalizers.logcpm_normalizer
     normalizers.cpm_normalizer
@@ -58,6 +62,7 @@ Visualization
 .. autosummary::
     :toctree: _autosummary
     :recursive:
+    :maxdepth: 5
 
     plot.svg_heatmap
     plot.spot_type_map
@@ -70,6 +75,7 @@ STDataset Methods
 .. autosummary::
     :toctree: _autosummary
     :recursive:
+    :maxdepth: 5
 
     STDataset.acquire_weight
     STDataset.acquire_hotspot
@@ -85,6 +91,7 @@ STDataset Attributes
 .. autosummary::
     :toctree: _autosummary
     :recursive:
+    :maxdepth: 5
 
     STDataset.AI
     STDataset.Di
@@ -109,6 +116,7 @@ Inner functions, not recommended use directly
 .. autosummary::
     :toctree: _autosummary
     :recursive:
+    :maxdepth: 5
 
     core.cluster.cluster
     core.density.hotspot_AI
