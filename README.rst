@@ -1,6 +1,7 @@
 #################
 svgbit quickstart
 #################
+For further detail, please visit our `API reference`_ on readthedocs.org
 
 
 
@@ -108,7 +109,8 @@ svgbit alse has count normalization functions::
     dataset = sb.normalizers.logcpm_normailzer(dataset)
 
 Feel free for choosing gene filters and data normalizers. Other filters
-and normalizers are also provided. Visit our API references for further detail.
+and normalizers are also provided. Visit our `API references`_ for further
+detail.
 
 
 Run svgbit
@@ -187,3 +189,7 @@ our manuscript.
 
 Citation
 ========
+
+
+
+.. _API reference: https://svgbit.readthedocs.io/en/latest/
