@@ -4,7 +4,7 @@ from multiprocessing import cpu_count
 from pathlib import Path
 
 from svgbit import load_10X, run, plot
-from svgbit.filters import low_variance_filter
+from svgbit.filters import low_variance_filter, quantile_filter
 from svgbit.normalizers import logcpm_normalizer
 
 
@@ -59,6 +59,7 @@ def main() -> None:
 
     d = load_10X(args.read_dir)
     d = low_variance_filter(d)
+    d = quantile_filter(d, 0.99)
     d = logcpm_normalizer(d)
     d = run(
         d,

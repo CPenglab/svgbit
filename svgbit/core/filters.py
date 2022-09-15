@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import pandas as pd
-
 from .STDataset import STDataset
 
 
@@ -32,7 +30,7 @@ def low_variance_filter(dataset: STDataset, var: float = 0) -> STDataset:
 
 def high_expression_filter(
     dataset: STDataset,
-    max_ratio: float = 0.95,
+    max_ratio: float = 0.99,
 ) -> STDataset:
     """
     Filter genes with high expression ratio.
@@ -42,7 +40,7 @@ def high_expression_filter(
     dataset : STDataset
         STDataset to be filtered.
 
-    max_ratio : int, default 0.95
+    max_ratio : int, default 0.99
         Only remain genes with expression ratio less than (but not equal to)
         max_ratio.
 
@@ -63,7 +61,7 @@ def high_expression_filter(
 
 def quantile_filter(
     dataset: STDataset,
-    quantile: float = 0.95
+    quantile: float = 0.99
 ) -> STDataset:
     """
     Filter genes with quantile.
@@ -73,7 +71,7 @@ def quantile_filter(
     dataset : STDataset
         STDataset to be filtered.
 
-    quantile : int, default 0.95
+    quantile : int, default 0.99
         Only remain genes with mean less than (but not equal to) quantile number.
 
     Returns
@@ -83,6 +81,6 @@ def quantile_filter(
     """
     mean_series = dataset.count_df.mean()
     q = mean_series.quantile(quantile)
-    drop_genes = mean_series[mean_series < q].index
-    count_df = dataset.count_df.reindex(columns=drop_genes)
+    remain_genes = mean_series[mean_series < q].index
+    count_df = dataset.count_df.reindex(columns=remain_genes)
     return STDataset(count_df, dataset.coordinate_df)
