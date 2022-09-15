@@ -9,7 +9,6 @@ STDataset
 .. currentmodule:: svgbit
 .. autosummary::
     :toctree: _autosummary
-    :maxdepth: 5
     :recursive:
 
     STDataset
@@ -22,7 +21,6 @@ Run svgbit within one function
 .. currentmodule:: svgbit
 .. autosummary::
     :toctree: _autosummary
-    :maxdepth: 5
     :recursive:
 
     run
@@ -34,7 +32,6 @@ Filters
 .. currentmodule:: svgbit
 .. autosummary::
     :toctree: _autosummary
-    :maxdepth: 5
     :recursive:
 
     filters.low_variance_filter
@@ -48,7 +45,6 @@ Normalizers
 .. currentmodule:: svgbit
 .. autosummary::
     :toctree: _autosummary
-    :maxdepth: 5
     :recursive:
 
     normalizers.logcpm_normalizer
@@ -61,7 +57,6 @@ Visualization
 .. currentmodule:: svgbit
 .. autosummary::
     :toctree: _autosummary
-    :maxdepth: 5
     :recursive:
 
     plot.svg_heatmap
@@ -74,7 +69,6 @@ STDataset Methods
 .. currentmodule:: svgbit
 .. autosummary::
     :toctree: _autosummary
-    :maxdepth: 5
     :recursive:
 
     STDataset.acquire_weight
@@ -90,7 +84,6 @@ STDataset Attributes
 .. currentmodule:: svgbit
 .. autosummary::
     :toctree: _autosummary
-    :maxdepth: 5
     :recursive:
 
     STDataset.AI
@@ -115,7 +108,6 @@ Inner functions, not recommended use directly
 .. currentmodule:: svgbit
 .. autosummary::
     :toctree: _autosummary
-    :maxdepth: 5
     :recursive:
 
     core.cluster.cluster
