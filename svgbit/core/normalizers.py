@@ -7,15 +7,19 @@ from .STDataset import STDataset
 
 def cpm_normalizer(dataset: STDataset) -> STDataset:
     scale_df = (dataset.count_df.T * 10000 / dataset.count_df.T.sum())
-    return STDataset(
+    d = STDataset(
         scale_df.T,
         dataset.coordinate_df,
     )
+    d._normalizer = "cpm"
+    return d
 
 
 def logcpm_normalizer(dataset: STDataset) -> STDataset:
     scale_df = nlog(dataset.count_df.T * 10000 / dataset.count_df.T.sum() + 1)
-    return STDataset(
+    d = STDataset(
         scale_df.T,
         dataset.coordinate_df,
     )
+    d._normalizer = "logcpm"
+    return d

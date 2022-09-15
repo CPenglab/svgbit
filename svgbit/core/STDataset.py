@@ -66,6 +66,7 @@ class STDataset(object):
         # attributes initial
         self._count_df: Optional[pd.DataFrame] = None
         self._coordinate_df: Optional[pd.DataFrame] = None
+        self._normalizer: Optional[str] = None
         self._weight: Optional[libpysal_W] = None
         self._weight_type: Tuple[Optional[str], Optional[str]] = (None, None)
         self._hotspot_df: Optional[pd.DataFrame] = None
@@ -122,9 +123,22 @@ class STDataset(object):
             self._count_df.columns = genes
             warnings.warn("Duplicated column names found. Auto rename.")
 
+    def __repr__(self) -> str:
+        descr = f"STDataset with n_spots x n_genes = {self.n_spots} x {self.n_genes}"
+        descr = f"{descr}\nApplied normalizers: {self._normalizer}"
+        descr = f"{descr}\nAssigned attributes: "
+        for attr in ["weight", "hotspot_df", "AI", "svg_cluster"]:
+            if getattr(self, attr) is not None:
+                descr += attr
+        return descr
+
+    def __str__(self) -> str:
+        return self.__repr__()
+
     def __del__(self) -> None:
         del self._count_df
         del self._coordinate_df
+        del self._normalizer
         del self._hotspot_df
         del self._weight
         del self._weight_type
