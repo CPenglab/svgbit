@@ -14,10 +14,6 @@ from libpysal.weights import W as libpysal_W
 from . import cluster, density, moran
 
 DataFrames = Union[pd.DataFrame, np.ndarray, Path, str]
-if not sys.warnoptions:
-    import os
-    warnings.simplefilter("default")  # Change the filter in this process
-    os.environ["PYTHONWARNINGS"] = "default"  # Also affect subprocesses
 
 
 class STDataset(object):
@@ -121,6 +117,7 @@ class STDataset(object):
             genes.append(gene_name)
         if flag:
             self._count_df.columns = genes
+            print("Duplicated column names found. Auto rename.")
             warnings.warn("Duplicated column names found. Auto rename.")
 
     def __repr__(self) -> str:
