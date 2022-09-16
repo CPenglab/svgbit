@@ -4,6 +4,7 @@ import gzip
 from pathlib import Path
 
 import anndata
+import numpy as np
 import pandas as pd
 import scipy.io
 from .STDataset import STDataset
@@ -47,9 +48,9 @@ def load_10X(read_path) -> STDataset:
 
     count_df = pd.DataFrame.sparse.from_spmatrix(
         scipy.io.mmread(mtx_path),
-        index=gene_name,
-        columns=spot_name,
     ).T.sparse.to_dense()
+    count_df.index = spot_name
+    count_df.columns = gene_name
     coor_df = pd.read_csv(position_path, index_col=0, header=None)
     coor_df = coor_df[[5, 4]]
     coor_df.index.name = "barcode"
@@ -89,5 +90,9 @@ def load_anndata_h5(read_path, **kwargs) -> STDataset:
     coor_df = pd.DataFrame(adata.obsm["spatial"])
     coor_df.index = count_df.index
     coor_df.columns = ["X", "Y"]
+
+    if isinstance(count_df.iloc[0, 0], np.float32):
+        count_df = count_df.astype(np.float64)
+
     dataset = STDataset(count_df, coor_df)
     return dataset
