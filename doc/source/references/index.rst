@@ -13,6 +13,7 @@ STDataset
 
     STDataset
     load_10X
+    load_anndata_h5
 
 
 

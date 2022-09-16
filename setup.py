@@ -27,6 +27,7 @@ setup(
     include_package_data=True,
     install_requires=[
         "setuptools",
+        "anndata>=0.8.0",
         "matplotlib>=3.5.1",
         "pandana>=0.6.1",
         "pysal>=2.4.0",

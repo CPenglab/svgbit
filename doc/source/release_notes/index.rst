@@ -4,6 +4,16 @@ Release notes
 
 
 
+0.2.5
+=====
+Release date: Sept 16, 2022
+
+Add anndata hdf5 file support.
+
+Minor fix.
+
+
+
 0.2.0
 =====
 Release date: Sept 13, 2022
