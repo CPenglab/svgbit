@@ -37,7 +37,7 @@ setup(
     entry_points={'console_scripts': [
         'svgbit = svgbit.__main__:main',
     ]},
-    python_requires=">=3.8.12",
+    python_requires=">=3.8",
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Environment :: Console",
