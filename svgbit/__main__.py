@@ -3,7 +3,7 @@ from argparse import ArgumentParser
 from multiprocessing import cpu_count
 from pathlib import Path
 
-from svgbit import load_10X, run, plot
+from svgbit import load_10X, load_anndata_h5, run, plot
 from svgbit.filters import low_variance_filter, quantile_filter
 from svgbit.normalizers import logcpm_normalizer
 
@@ -12,19 +12,19 @@ def main() -> None:
     parser = ArgumentParser(
         prog="svgbit",
         description='''Find spatial variable genes for Spatial Trasncriptomics
-        data.''',
+                       data.''',
     )
     parser.add_argument(
-        "read_dir",
-        help='''a location points to 10X outs dir. Assume directories
-            ``filtered_feature_bc_matrix`` and ``spatial`` are in this path.''',
+        "read_path",
+        help='''Read Spatial Transcriptomics data. Support format in 10X Space
+                Ranger(dir named ``outs``) and anndata hdf5''',
     )
     parser.add_argument(
         "--k",
         type=int,
         default=6,
         help='''number of nearest neighbors for KNN network
-        (default: %(default)s)''',
+                (default: %(default)s)''',
     )
     parser.add_argument(
         "--n_svgs",
@@ -42,7 +42,7 @@ def main() -> None:
         "--he_image",
         default=None,
         help='''path to H&E image. Only used for visualization
-        (default: %(default)s)''',
+                (default: %(default)s)''',
     )
     parser.add_argument(
         "--savedir",
@@ -57,7 +57,13 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    d = load_10X(args.read_dir)
+    read_path = Path(args.read_path)
+    if read_path.is_dir():
+        load_func = load_10X
+    else:
+        load_func = load_anndata_h5
+
+    d = load_func(read_path)
     d = low_variance_filter(d)
     d = quantile_filter(d, 0.99)
     d = logcpm_normalizer(d)
@@ -76,7 +82,8 @@ def main() -> None:
     d.svg_cluster.to_csv(Path.joinpath(savedir, "svg_cluster.csv"))
 
     plot.svg_heatmap(d, Path.joinpath(savedir, "heatmap.jpg"), args.he_image)
-    plot.spot_type_map(d, Path.joinpath(savedir, "type_map.jpg"), args.he_image)
+    plot.spot_type_map(d, Path.joinpath(savedir, "type_map.jpg"),
+                       args.he_image)
 
 
 if __name__ == "__main__":
