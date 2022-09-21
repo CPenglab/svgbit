@@ -1,6 +1,9 @@
 #################
 svgbit quickstart
 #################
+.. image:: https://badge.fury.io/py/svgbit.svg
+    :target: https://badge.fury.io/py/svgbit
+
 For further detail, please visit our `API reference`_ on readthedocs.org
 
 
