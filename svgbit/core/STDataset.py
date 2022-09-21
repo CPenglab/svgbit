@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from copy import deepcopy
-import sys
 import warnings
 from typing import Optional, Tuple, Union
 from pathlib import Path
@@ -126,7 +125,7 @@ class STDataset(object):
         descr = f"{descr}\nAssigned attributes: "
         for attr in ["weight", "hotspot_df", "AI", "svg_cluster"]:
             if getattr(self, attr) is not None:
-                descr += attr
+                descr = f"{descr}, {attr}"
         return descr
 
     def __str__(self) -> str:

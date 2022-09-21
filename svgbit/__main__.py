@@ -76,6 +76,8 @@ def main() -> None:
     )
 
     savedir = Path(args.savedir)
+    if not savedir.exists():
+        savedir.mkdir()
     d.hotspot_df.to_csv(Path.joinpath(savedir, "hotspot_df.csv"))
     d.AI.to_csv(Path.joinpath(savedir, "AI.csv"))
     d.Di.to_csv(Path.joinpath(savedir, "Di.csv"))
