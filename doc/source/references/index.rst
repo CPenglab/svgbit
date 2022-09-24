@@ -12,8 +12,19 @@ STDataset
     :recursive:
 
     STDataset
+
+
+
+Load dataset from disk
+======================
+.. currentmodule:: svgbit
+.. autosummary::
+    :toctree: _autosummary
+    :recursive:
+
     load_10X
     load_anndata_h5
+    load_table
 
 
 

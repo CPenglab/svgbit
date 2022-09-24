@@ -24,7 +24,7 @@ def load_10X(read_path) -> STDataset:
     Returns
     =======
     dataset : STDataset
-        A STDataset instance generated from read_dir.
+        A STDataset instance generated from read_path.
     """
     read_path = Path(read_path)
     mat_dir = Path.joinpath(read_path, "filtered_feature_bc_matrix")
@@ -79,7 +79,7 @@ def load_anndata_h5(read_path, **kwargs) -> STDataset:
     Returns
     =======
     dataset : STDataset
-        A STDataset instance generated from read_dir.
+        A STDataset instance generated from read_path.
     """
     adata = anndata.read_h5ad(read_path, **kwargs)
     count_df = pd.DataFrame.sparse.from_spmatrix(
@@ -96,3 +96,43 @@ def load_anndata_h5(read_path, **kwargs) -> STDataset:
 
     dataset = STDataset(count_df, coor_df)
     return dataset
+
+
+def load_table(read_path, **kwargs) -> STDataset:
+    """
+    Load anndata saved h5ad file and generate STDataset.
+
+    Parameters
+    ==========
+    read_path : str or pathlib.Path
+        File name to read from.
+
+    **kwargs
+        Additional keyword arguments passed to pd.read_csv
+
+    Returns
+    =======
+    dataset : STDataset
+        A STDataset instance generated from read_dir.
+    """
+    read_df = pd.read_csv(read_path, **kwargs)
+    count_dict = {}
+    coor_dict = {}
+    for it in read_df.iterrows():
+        try:
+            spot_name = it[1].iloc[3]
+        except IndexError:
+            spot_name = f"{it[1].iloc[0]}x{it[1].iloc[1]}"
+        if spot_name not in coor_dict.keys():
+            coor_dict[spot_name] = {"X": it[1].iloc[0], "Y": it[1].iloc[1]}
+        if spot_name not in count_dict.keys():
+            count_dict[spot_name] = {}
+        if it[0] not in count_dict[spot_name].keys():
+            count_dict[spot_name][it[0]] = it[1][2]
+        else:
+            count_dict[spot_name][it[0]] += it[1][2]
+    count_df = pd.DataFrame.from_dict(count_dict).fillna(0).T
+    coor_df = pd.DataFrame.from_dict(coor_dict).T
+    coor_df = coor_df.reindex(index=count_df.index)
+
+    return STDataset(count_df, coor_df)
