@@ -45,7 +45,7 @@ def main() -> None:
                 (default: %(default)s)''',
     )
     parser.add_argument(
-        "--savedir",
+        "--save_dir",
         default=".",
         help='''path to save results (default: %(default)s)''',
     )
@@ -75,7 +75,7 @@ def main() -> None:
         cores=args.cores,
     )
 
-    savedir = Path(args.savedir)
+    savedir = Path(args.save_dir)
     if not savedir.exists():
         savedir.mkdir()
     d.hotspot_df.to_csv(Path.joinpath(savedir, "hotspot_df.csv"))

@@ -25,7 +25,7 @@ svgbit has a command line version. Just tape::
 after installation, and you may get a short help massage::
 
     usage: svgbit [-h] [--k K] [--n_svgs N_SVGS] [--n_svg_clusters N_SVG_CLUSTERS]
-                  [--he_image HE_IMAGE] [--savedir SAVEDIR] [--cores CORES] read_dir
+                  [--he_image HE_IMAGE] [--save_dir SAVE_DIR] [--cores CORES] read_dir
 
     Find spatial variable genes for Spatial Trasncriptomics data.
 
@@ -40,7 +40,7 @@ after installation, and you may get a short help massage::
     --n_svg_clusters N_SVG_CLUSTERS
     number of SVG clusters to find (default: 8)
     --he_image HE_IMAGE   path to H&E image. Only used for visualization (default: None)
-    --savedir SAVEDIR     path to save results (default: .)
+    --save_dir SAVE_DIR   path to save results (default: .)
     --cores CORES         number of threads to run svgbit (default: 8)
 
 Follow the introduction and results will save to --savedir.
