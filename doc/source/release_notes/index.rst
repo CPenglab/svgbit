@@ -4,6 +4,16 @@ Release notes
 
 
 
+0.2.6
+=====
+Release date: Not released yet.
+
+Add txt table support.
+
+Minor fix.
+
+
+
 0.2.5
 =====
 Release date: Sept 16, 2022
