@@ -11,11 +11,11 @@ from pysal.explore import esda
 
 
 def local_moran(
-        gene_expression_df: pd.DataFrame,
-        weights: libpysal_W,
-        transformation: str = 'r',
-        permutation: int = 999,
-        cores: int = cpu_count(),
+    gene_expression_df: pd.DataFrame,
+    weights: libpysal_W,
+    transformation: str = 'r',
+    permutation: int = 999,
+    cores: int = cpu_count(),
 ) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     """
     Calculate local moran for hotspot identification.
@@ -51,13 +51,15 @@ def local_moran(
     """
     partial_func = partial(
         _local_moran,
-        gene_expression_df=gene_expression_df,
         weights=weights,
         transformation=transformation,
         permutation=permutation,
     )
     pool = Pool(processes=cores)
-    result_lists = pool.map(partial_func, gene_expression_df.columns)
+    result_lists = pool.map(
+        partial_func,
+        [gene_expression_df[i] for i in gene_expression_df.columns],
+    )
     pool.close()
     pool.join()
     hotspot = pd.concat([i[0] for i in result_lists], axis=1)
@@ -68,8 +70,7 @@ def local_moran(
 
 
 def _local_moran(
-    gene: str,
-    gene_expression_df: pd.DataFrame,
+    gene_expression_series: pd.Series,
     weights: libpysal_W,
     transformation: str = "r",
     permutation: int = 999,
@@ -79,11 +80,8 @@ def _local_moran(
 
     Parameters
     ==========
-    gene : str
-        Calculate which gene.
-
-    gene_expression_df : pd.DataFrame
-       Expression matrix for Spatial Transcriptomics Data.
+    gene_expression_series : pd.Series
+       Expression series for Spatial Transcriptomics Data.
 
     weights : libpysal.weights.W
         Spatial weight for calculating Moran's I.
@@ -106,9 +104,11 @@ def _local_moran(
         Local Moran's I p values.
 
     """
+    gene = gene_expression_series.name
+    spots = gene_expression_series.index
     numba.config.THREADING_LAYER = "workqueue"
     gene_lisa = esda.moran.Moran_Local(
-        gene_expression_df[gene],
+        gene_expression_series,
         weights,
         transformation=transformation,
         permutations=permutation,
@@ -119,7 +119,7 @@ def _local_moran(
 
     hotspot = pd.Series(
         local_moran_hotspot,
-        index=gene_expression_df.index,
+        index=spots,
         name=gene,
     )
     if (hotspot == 1).all():
@@ -127,12 +127,12 @@ def _local_moran(
 
     i_value = pd.Series(
         gene_lisa.EI_sim,
-        index=gene_expression_df.index,
+        index=spots,
         name=gene,
     )
     p_value = pd.Series(
         gene_lisa.p_sim,
-        index=gene_expression_df.index,
+        index=spots,
         name=gene,
     )
 
@@ -196,8 +196,7 @@ def global_moran(
 
 
 def _global_moran(
-    gene: str,
-    gene_expression_df: pd.DataFrame,
+    gene_expression_series: pd.Series,
     weights: libpysal_W,
     transformation: str = 'r',
     permutation: int = 999,
@@ -207,11 +206,8 @@ def _global_moran(
 
     Parameters
     ==========
-    gene : str
-        Calculate which gene.
-
-    gene_expression_df : pd.DataFrame
-       Expression matrix for Spatial Transcriptomics Data.
+    gene_expression_series : pd.Series
+       Expression series for Spatial Transcriptomics Data.
 
     weights : libpysal.weights.W
         Spatial weight for calculating Moran's I.
@@ -228,6 +224,7 @@ def _global_moran(
         Global Moran's I result.
 
     """
+    gene = gene_expression_series.name
     global_moran_df = pd.DataFrame(
         columns=[
             'I_value',
@@ -239,7 +236,7 @@ def _global_moran(
         index=[gene],
     )
     moran_value = esda.moran.Moran(
-        gene_expression_df[gene],
+        gene_expression_series,
         weights,
         transformation=transformation,
         permutations=permutation,
