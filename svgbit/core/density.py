@@ -12,8 +12,7 @@ from .utils import pysal_to_pandas
 
 
 def _hotspot_AI(
-    gene: str,
-    hotspot_df: pd.DataFrame,
+    hotspot_series: pd.Series,
     weight_df: pd.DataFrame,
     knn: Union[pd.DataFrame, libpysal_W],
 ) -> Tuple[pd.Series, pd.Series]:
@@ -45,21 +44,22 @@ def _hotspot_AI(
     """
     if isinstance(knn, libpysal_W):
         knn = pysal_to_pandas(knn)
-        knn.index = hotspot_df.index
-        knn.columns = hotspot_df.index
+        knn.index = hotspot_series.index
+        knn.columns = hotspot_series.index
 
-    gene_hotspot_df = hotspot_df[hotspot_df[gene] != 0]
-    gene_hotspot_df = pd.DataFrame(gene_hotspot_df[gene], columns=[gene])
-    n_hotspots = len(gene_hotspot_df)
+    gene_hotspot_series = hotspot_series[hotspot_series != 0]
+    n_hotspots = len(gene_hotspot_series)
+    gene = hotspot_series.name
+    spots = hotspot_series.index
     if n_hotspots == 0:
         ai_series = pd.Series([0], index=[gene], name="AI")
         di_series = pd.Series(
-            [0] * len(hotspot_df),
-            index=hotspot_df.index,
+            [0] * len(hotspot_series),
+            index=spots,
             name=gene,
         )
         return ai_series, di_series
-    hotspots = gene_hotspot_df.index.tolist()
+    hotspots = gene_hotspot_series.index.tolist()
     hs = {}
     for i in hotspots:
         hi_wnn_df = pd.DataFrame(knn[i], columns=[i])
@@ -76,7 +76,7 @@ def _hotspot_AI(
     di_series = pd.Series(
         hs,
         name=gene,
-    ).reindex(index=hotspot_df.index).fillna(0)
+    ).reindex(index=spots).fillna(0)
 
     return ai_series, di_series
 
@@ -119,12 +119,14 @@ def hotspot_AI(
         knn.columns = hotspot_df.index
     partial_func = partial(
         _hotspot_AI,
-        hotspot_df=hotspot_df,
         weight_df=weight_df,
         knn=knn,
     )
     pool = Pool(processes=cores)
-    result_lists = pool.map(partial_func, hotspot_df.columns)
+    result_lists = pool.map(
+        partial_func,
+        [hotspot_df[i] for i in hotspot_df.index],
+    )
     pool.close()
     pool.join()
     ai_series = pd.concat([i[0] for i in result_lists], axis=0)
