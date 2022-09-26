@@ -3,7 +3,7 @@ from argparse import ArgumentParser
 from multiprocessing import cpu_count
 from pathlib import Path
 
-from svgbit import load_10X, load_anndata_h5, run, plot
+from svgbit import load_10X, load_anndata_h5, load_table, run, plot
 from svgbit.filters import low_variance_filter, quantile_filter
 from svgbit.normalizers import logcpm_normalizer
 
@@ -60,10 +60,20 @@ def main() -> None:
     read_path = Path(args.read_path)
     if read_path.is_dir():
         load_func = load_10X
+        kwargs = {}
     else:
-        load_func = load_anndata_h5
+        if read_path.suffix in [".h5", ".hdf5"]:
+            load_func = load_anndata_h5
+            kwargs = {}
+        else:
+            load_func = load_table
+            if ".csv" in read_path.suffixes:
+                sep = ","
+            elif ".tsv" in read_path.suffixes:
+                sep = "\t"
+            kwargs = {"index_col": 0, "header": 0, "sep": sep}
 
-    d = load_func(read_path)
+    d = load_func(read_path, **kwargs)
     d = low_variance_filter(d)
     d = quantile_filter(d, 0.99)
     d = logcpm_normalizer(d)

@@ -25,12 +25,12 @@ svgbit has a command line version. Just tape::
 after installation, and you may get a short help massage::
 
     usage: svgbit [-h] [--k K] [--n_svgs N_SVGS] [--n_svg_clusters N_SVG_CLUSTERS]
-                  [--he_image HE_IMAGE] [--save_dir SAVE_DIR] [--cores CORES] read_dir
+                  [--he_image HE_IMAGE] [--save_dir SAVE_DIR] [--cores CORES] read_path
 
     Find spatial variable genes for Spatial Trasncriptomics data.
 
     positional arguments:
-    read_dir              a location points to 10X outs dir. Assume directories
+    read_path             a location points to 10X outs dir. Assume directories
                           ``filtered_feature_bc_matrix`` and ``spatial`` are in this path.
 
     optional arguments:
