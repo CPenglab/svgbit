@@ -125,7 +125,7 @@ def hotspot_AI(
     pool = Pool(processes=cores)
     result_lists = pool.map(
         partial_func,
-        [hotspot_df[i] for i in hotspot_df.index],
+        [hotspot_df[i] for i in hotspot_df.columns],
     )
     pool.close()
     pool.join()
