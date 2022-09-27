@@ -174,7 +174,6 @@ def global_moran(
     """
     partial_func = partial(
         _global_moran,
-        gene_expression_df=gene_expression_df,
         weights=weights,
         transformation=transformation,
         permutation=permutation,
