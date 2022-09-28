@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import pandas as pd
+
 from .STDataset import STDataset
 
 
@@ -20,11 +22,12 @@ def low_variance_filter(dataset: STDataset, var: float = 0) -> STDataset:
     dataset : STDataset
         A STDataset instance with filtered genes.
     """
-    count_df = dataset.count_df.sparse.to_dense()
-    var_series = count_df.var()
+    var_series = pd.Series()
+    for gene in dataset.count_df.columns:
+        var_series[gene] = dataset.count_df[gene].sparse.to_dense().var()
     var_series = var_series[var_series > var]
     return STDataset(
-        count_df.reindex(columns=var_series.index),
+        dataset.count_df.reindex(columns=var_series.index),
         dataset.coordinate_df,
     )
 
