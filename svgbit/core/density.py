@@ -42,6 +42,8 @@ def _hotspot_AI(
         A Series for local Di value.
 
     """
+    hotspot_series = hotspot_series.sparse.to_dense()
+    weight_df = weight_df.sparse.to_dense()
     if isinstance(knn, libpysal_W):
         knn = pysal_to_pandas(knn)
         knn.index = hotspot_series.index

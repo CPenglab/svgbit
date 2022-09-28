@@ -20,10 +20,11 @@ def low_variance_filter(dataset: STDataset, var: float = 0) -> STDataset:
     dataset : STDataset
         A STDataset instance with filtered genes.
     """
-    var_series = dataset.count_df.var()
+    count_df = dataset.count_df.sparse.to_dense()
+    var_series = count_df.var()
     var_series = var_series[var_series > var]
     return STDataset(
-        dataset.count_df.reindex(columns=var_series.index),
+        count_df.reindex(columns=var_series.index),
         dataset.coordinate_df,
     )
 

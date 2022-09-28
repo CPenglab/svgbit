@@ -67,7 +67,7 @@ class STDataset(object):
         self._hotspot_df: Optional[pd.DataFrame] = None
         self._local_moran_i: Optional[pd.DataFrame] = None
         self._local_moran_p: Optional[pd.DataFrame] = None
-        self._AI: Optional[pd.DataFrame] = None
+        self._AI: Optional[pd.Series] = None
         self._Di: Optional[pd.DataFrame] = None
         self._svg_cluster: Optional[pd.Series] = None
         self._spot_type: Optional[pd.DataFrame] = None
@@ -118,6 +118,12 @@ class STDataset(object):
             self._count_df.columns = genes
             print("Duplicated column names found. Auto rename.")
             warnings.warn("Duplicated column names found. Auto rename.")
+
+        if isinstance(self._count_df.iloc[0, 0], int):
+            dt = "int64"
+        else:
+            dt = "float64"
+        self._count_df = self._count_df.astype(pd.SparseDtype(dt, 0))
 
     def __repr__(self) -> str:
         descr = f"STDataset with n_spots x n_genes = {self.n_spots} x {self.n_genes}"
@@ -181,9 +187,9 @@ class STDataset(object):
         self._hotspot_df = hotspot.reindex(
             index=self.spots,
             columns=self.genes,
-        )
-        self._local_moran_i = i_value
-        self._local_moran_p = p_value
+        ).astype(pd.SparseDtype("int8", 0))
+        self._local_moran_i = i_value.astype(pd.SparseDtype("float", 0))
+        self._local_moran_p = p_value.astype(pd.SparseDtype("float", 0))
 
     def acquire_density(self, cores: int = density.cpu_count()) -> None:
         """
@@ -197,12 +203,14 @@ class STDataset(object):
         """
         if self._hotspot_df is None:
             self.acquire_hotspot()
-        self._AI, self._Di = density.hotspot_AI(
+        results = density.hotspot_AI(
             hotspot_df=self._hotspot_df,
             weight_df=-np.log(self._local_moran_p),
             knn=self._weight,
             cores=cores,
         )
+        self._AI = results[0]
+        self._Di = results[1].astype(pd.SparseDtype("float", 0))
 
     def find_clusters(
         self,

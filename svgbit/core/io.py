@@ -48,7 +48,7 @@ def load_10X(read_path) -> STDataset:
 
     count_df = pd.DataFrame.sparse.from_spmatrix(
         scipy.io.mmread(mtx_path),
-    ).T.sparse.to_dense()
+    ).T
     count_df.index = spot_name
     count_df.columns = gene_name
     coor_df = pd.read_csv(position_path, index_col=0, header=None)
@@ -86,7 +86,7 @@ def load_anndata_h5(read_path, **kwargs) -> STDataset:
         adata.X,
         index=adata.obs.index,
         columns=adata.var.index,
-    ).sparse.to_dense()
+    )
     coor_df = pd.DataFrame(adata.obsm["spatial"])
     coor_df.index = count_df.index
     coor_df.columns = ["X", "Y"]
