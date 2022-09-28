@@ -62,7 +62,7 @@ def main() -> None:
         load_func = load_10X
         kwargs = {}
     else:
-        if read_path.suffix in [".h5", ".hdf5"]:
+        if read_path.suffix in [".h5", ".hdf5", ".h5ad"]:
             load_func = load_anndata_h5
             kwargs = {}
         else:
