@@ -12,6 +12,9 @@ Add txt table support.
 
 Use sparse data structures.
 
+Now normalizers may specify with parameter ``normalization`` when using
+command-line interface.
+
 Minor fix.
 
 

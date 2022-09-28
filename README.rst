@@ -35,6 +35,11 @@ after installation, and you may get a short help massage::
 
     optional arguments:
     -h, --help            show this help message and exit
+    --normalization NORMALIZATION
+                          apply which normalization on read data. If None (default),
+                          neither normalization will apply. Supported values: None, cpm,
+                          logcpm (default: None)
+
     --k K                 number of nearest neighbors for KNN network (default: 6)
     --n_svgs N_SVGS       number of SVGs to find clusters (default: 1000)
     --n_svg_clusters N_SVG_CLUSTERS
