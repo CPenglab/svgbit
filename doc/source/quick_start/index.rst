@@ -30,8 +30,9 @@ after installation, and you may get a short help massage::
     Find spatial variable genes for Spatial Trasncriptomics data.
 
     positional arguments:
-    read_path             a location points to 10X outs dir. Assume directories
-                          ``filtered_feature_bc_matrix`` and ``spatial`` are in this path.
+    read_path             Read Spatial Transcriptomics data. Support format in 10X
+                          Space Ranger(dir named ``outs``) and anndata hdf5
+
 
     optional arguments:
     -h, --help            show this help message and exit
