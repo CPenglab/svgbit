@@ -10,6 +10,8 @@ Release date: Not released yet.
 
 Add txt table support.
 
+Use sparse data structures.
+
 Minor fix.
 
 
