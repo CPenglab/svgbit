@@ -5,7 +5,7 @@ from pathlib import Path
 
 from svgbit import load_10X, load_anndata_h5, load_table, run, plot
 from svgbit.filters import low_variance_filter, quantile_filter
-from svgbit.normalizers import logcpm_normalizer
+from svgbit.normalizers import logcpm_normalizer, cpm_normalizer
 
 
 def main() -> None:
@@ -18,6 +18,13 @@ def main() -> None:
         "read_path",
         help='''Read Spatial Transcriptomics data. Support format in 10X Space
                 Ranger(dir named ``outs``) and anndata hdf5''',
+    )
+    parser.add_argument(
+        "--normalization",
+        default=None,
+        help='''apply which normalization on read data. If None (default), neither
+                normalization will apply. Supported values: None, cpm, logcpm
+                (default: %(default)s)''',
     )
     parser.add_argument(
         "--k",
@@ -76,7 +83,17 @@ def main() -> None:
     d = load_func(read_path, **kwargs)
     d = low_variance_filter(d)
     d = quantile_filter(d, 0.99)
-    d = logcpm_normalizer(d)
+    norm = args.normalization
+    if norm is not None:
+        norm = norm.lower()
+        if norm == "none":
+            pass
+        elif norm == "logcpm":
+            d = logcpm_normalizer(d)
+        elif norm == "cpm":
+            d = cpm_normalizer(d)
+        else:
+            raise ValueError(f"Not supported normalization: {args.normalization}")
     d = run(
         d,
         k=args.k,
