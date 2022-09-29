@@ -20,6 +20,7 @@ def _svg_heatmap(
     cluster_result: pd.Series,
     save_path: Union[str, Path],
     he_image: Optional[Union[str, Path]] = None,
+    s: float = 4,
 ) -> None:
     """
     Draw SVG distribution heatmap.
@@ -41,6 +42,9 @@ def _svg_heatmap(
     he_image : str or pathlib.Path, default None
         H&E image of tissue. If None is given (default), distribution map
         will not show tissue picture.
+
+    s : float, default 4
+        Spot size.
     """
 
     left, bottom = 0.1, 0.1
@@ -74,7 +78,7 @@ def _svg_heatmap(
             cmap="autumn_r",
             vmin=0,
             vmax=1,
-            s=4,
+            s=s,
             alpha=0.7,
         )
 
@@ -126,6 +130,7 @@ def _hotspot_distribution_map(
     cluster: Union[str, int],
     save_path: Union[str, Path],
     he_image: Optional[Union[str, Path]] = None,
+    s: float = 4,
 ) -> None:
     """
     Draw hotspot distribution map for one SVG cluster.
@@ -150,6 +155,9 @@ def _hotspot_distribution_map(
     he_image : str or pathlib.Path, default None
         H&E image of tissue. If None is given (default), distribution map
         will not show tissue picture.
+
+    s : float, default 4
+        Spot size.
     """
 
     fig, ax = plt.subplots(figsize=(10, 10), dpi=300)
@@ -166,7 +174,7 @@ def _hotspot_distribution_map(
         cmap="autumn_r",
         vmin=0,
         vmax=1,
-        s=4,
+        s=s,
         alpha=0.7,
     )
     fig.colorbar(sc)
@@ -186,6 +194,7 @@ def _spot_type_map(
     save_path: Union[str, Path],
     he_image: Optional[Union[str, Path]] = None,
     draw_uncertain: bool = True,
+    s: float = 16,
 ) -> None:
     """
     Draw SVG type map.
@@ -210,6 +219,9 @@ def _spot_type_map(
 
     draw_uncertain : bool, default True
         Whether to draw uncertain spots.
+
+    s : float, default 16
+        Spot size.
     """
 
     if draw_uncertain:
@@ -239,7 +251,7 @@ def _spot_type_map(
     sc = ax.scatter(
         coordinate_df["X"],
         coordinate_df["Y"],
-        s=16,
+        s=s,
         c=type_df["type_1"],
         cmap=cmap,
     )
@@ -269,6 +281,7 @@ def svg_heatmap(
     dataset: STDataset,
     save_path: Union[str, Path],
     he_image: Optional[Union[str, Path]] = None,
+    s: float = 4,
 ) -> None:
     """
     Draw SVG distribution heatmap.
@@ -284,6 +297,9 @@ def svg_heatmap(
     he_image : str or pathlib.Path, default None
         H&E image of tissue. If None is given (default), distribution map
         will not show tissue picture.
+
+    s : float, default 4
+        Spot size.
     """
     _svg_heatmap(
         dataset.hotspot_df,
@@ -291,6 +307,7 @@ def svg_heatmap(
         dataset.svg_cluster,
         save_path,
         he_image,
+        s,
     )
 
 
@@ -299,6 +316,7 @@ def hotspot_distribution_map(
     cluster: Union[str, int],
     save_path: Union[str, Path],
     he_image: Optional[Union[str, Path]] = None,
+    s: float = 4,
 ) -> None:
     """
     Draw hotspot distribution map for one SVG cluster.
@@ -317,6 +335,9 @@ def hotspot_distribution_map(
     he_image : str or pathlib.Path, default None
         H&E image of tissue. If None is given (default), distribution map
         will not show tissue picture.
+
+    s : float, default 4
+        Spot size.
     """
     _hotspot_distribution_map(
         dataset.hotspot_df,
@@ -325,6 +346,7 @@ def hotspot_distribution_map(
         cluster,
         save_path,
         he_image,
+        s,
     )
 
 
@@ -333,6 +355,7 @@ def spot_type_map(
     save_path: Union[str, Path],
     he_image: Optional[Union[str, Path]] = None,
     draw_uncertain: bool = True,
+    s: float = 16,
 ) -> None:
     """
     Draw SVG type map.
@@ -351,6 +374,9 @@ def spot_type_map(
 
     draw_uncertain : bool, default True
         Whether to draw uncertain spots.
+
+    s : float, default 16
+        Spot size.
     """
     _spot_type_map(
         dataset.hotspot_df,
@@ -359,4 +385,5 @@ def spot_type_map(
         save_path,
         he_image,
         draw_uncertain,
+        s,
     )
