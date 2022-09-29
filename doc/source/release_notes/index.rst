@@ -6,7 +6,7 @@ Release notes
 
 0.2.6
 =====
-Release date: Not released yet.
+Release date: Sept. 29, 2022
 
 Add txt table support.
 
@@ -21,7 +21,7 @@ Minor fix.
 
 0.2.5
 =====
-Release date: Sept 16, 2022
+Release date: Sept. 16, 2022
 
 Add anndata hdf5 file support.
 
@@ -31,7 +31,7 @@ Minor fix.
 
 0.2.0
 =====
-Release date: Sept 13, 2022
+Release date: Sept. 13, 2022
 
 Command-line interface change: only support load_10X.
 
@@ -45,7 +45,7 @@ New visualization add: SVG cluster distribution map for single cluster.
 
 0.1.2
 =====
-Release date: Aug 12, 2022
+Release date: Aug. 12, 2022
 
 Bug fix: Use -logP as AI weight matrix.
 
