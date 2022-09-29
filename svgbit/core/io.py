@@ -100,7 +100,20 @@ def load_anndata_h5(read_path, **kwargs) -> STDataset:
 
 def load_table(read_path, **kwargs) -> STDataset:
     """
-    Load anndata saved h5ad file and generate STDataset.
+    Load text file and generate STDataset.
+
+    Support tables in following format:
+
+    ======== === === ======== ============
+     geneID   X   Y   counts   spot_name
+                               (optional)
+    ======== === === ======== ============
+     gene_1   1   1      1      spot_1
+     gene_2   1   1      2      spot_1
+     gene_1   1   2      1      spot_2
+     gene_3   1   2      3      spot_2
+      ...    ... ...    ...       ...
+    ======== === === ======== ============
 
     Parameters
     ==========
