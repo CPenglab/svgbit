@@ -46,12 +46,16 @@ def load_10X(read_path) -> STDataset:
             line = line.strip()
             spot_name.append(line)
 
-    count_df = pd.DataFrame.sparse.from_spmatrix(
-        scipy.io.mmread(mtx_path),
-    ).T
+    count_df = pd.DataFrame.sparse.from_spmatrix(scipy.io.mmread(mtx_path), ).T
     count_df.index = spot_name
     count_df.columns = gene_name
-    coor_df = pd.read_csv(position_path, index_col=0, header=None)
+
+    try:
+        coor_df = pd.read_csv(position_path, index_col=0, header=None)
+    except FileNotFoundError:
+        position_path = Path.joinpath(read_path, "spatial",
+                                      "tissue_positions.csv")
+        coor_df = pd.read_csv(position_path, index_col=0, header=None)
     coor_df = coor_df[[5, 4]]
     coor_df.index.name = "barcode"
     coor_df.columns = ["X", "Y"]
