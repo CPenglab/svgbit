@@ -52,11 +52,13 @@ def load_10X(read_path) -> STDataset:
 
     try:
         coor_df = pd.read_csv(position_path, index_col=0, header=None)
+        chemical = "v1"
     except FileNotFoundError:
         position_path = Path.joinpath(read_path, "spatial",
                                       "tissue_positions.csv")
         coor_df = pd.read_csv(position_path, index_col=0, header=None)
-    coor_df = coor_df[[5, 4]]
+        chemical = "v2"
+    coor_df = coor_df[[5, 4]] if chemical == "v1" else coor_df[[4, 5]]
     coor_df.index.name = "barcode"
     coor_df.columns = ["X", "Y"]
     coor_df = coor_df.reindex(index=count_df.index)
