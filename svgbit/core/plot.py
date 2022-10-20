@@ -8,7 +8,6 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import pandas as pd
 from PIL import Image
-from scipy.cluster import hierarchy as sch
 from seaborn import color_palette
 
 from .STDataset import STDataset
@@ -18,11 +17,11 @@ def _svg_heatmap(
     hotspot_df: pd.DataFrame,
     coordinate_df: pd.DataFrame,
     cluster_result: pd.Series,
-    spot_type : pd.DataFrame,
+    spot_type: pd.DataFrame,
     save_path: Union[str, Path],
     he_image: Optional[Union[str, Path]] = None,
     s: float = 4,
-    dpi: float=300,
+    dpi: float = 300,
 ) -> None:
     """
     Draw SVG distribution heatmap.
@@ -134,7 +133,7 @@ def _hotspot_distribution_map(
     save_path: Union[str, Path],
     he_image: Optional[Union[str, Path]] = None,
     s: float = 4,
-    dpi: float=300,
+    dpi: float = 300,
 ) -> None:
     """
     Draw hotspot distribution map for one SVG cluster.
@@ -324,7 +323,7 @@ def svg_heatmap(
         hotspot_df=dataset.hotspot_df,
         coordinate_df=coor_df,
         cluster_result=dataset.svg_cluster,
-        type_df=dataset.spot_type,
+        fpot_type=dataset.spot_type,
         save_path=save_path,
         he_image=he_image,
         s=s,
