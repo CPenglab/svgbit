@@ -18,9 +18,11 @@ def _svg_heatmap(
     hotspot_df: pd.DataFrame,
     coordinate_df: pd.DataFrame,
     cluster_result: pd.Series,
+    spot_type : pd.DataFrame,
     save_path: Union[str, Path],
     he_image: Optional[Union[str, Path]] = None,
     s: float = 4,
+    dpi: float=300,
 ) -> None:
     """
     Draw SVG distribution heatmap.
@@ -36,6 +38,9 @@ def _svg_heatmap(
     cluster_result : pd.Series
         A pd.Series for cluster result.
 
+    spot_type : pd.DataFrame
+        A pd.DataFrame for assigned type_df.
+
     save_path : str or pathlib.Path
         Heatmap save path.
 
@@ -45,14 +50,19 @@ def _svg_heatmap(
 
     s : float, default 4
         Spot size.
+
+    dpi : float, default 300
+        DPI for saved figure.
     """
+
+    spot_type = spot_type.sort_values(by="type_1")
 
     left, bottom = 0.1, 0.1
     width, height = 0.66, 0.66
     spacing, cluster_width = 0.03, 0.22
     rect_heatmap = [left + spacing, bottom + spacing * 2, width, height]
 
-    fig = plt.figure(figsize=(10, 10), dpi=300)
+    fig = plt.figure(figsize=(10, 10), dpi=dpi)
     ax_heatmap = fig.add_axes(rect_heatmap)
 
     if he_image is not None:
@@ -92,16 +102,9 @@ def _svg_heatmap(
     ax_cb = fig.add_axes(rect_cb)
     fig.colorbar(sc, cax=ax_cb)
 
-    spot_distmat = sch.distance.pdist(hotspot_df, metric="jaccard")
-    Z_spot = sch.linkage(spot_distmat, method="ward")
-    spot_result = pd.Series(
-        sch.fcluster(Z_spot, t=8, criterion="maxclust"),
-        index=hotspot_df.index,
-    ).sort_values()
-
     ax_heatmap.imshow(
         hotspot_df.reindex(
-            index=spot_result.index,
+            index=spot_type.index,
             columns=cluster_result.index,
         ),
         cmap="Reds",
@@ -131,6 +134,7 @@ def _hotspot_distribution_map(
     save_path: Union[str, Path],
     he_image: Optional[Union[str, Path]] = None,
     s: float = 4,
+    dpi: float=300,
 ) -> None:
     """
     Draw hotspot distribution map for one SVG cluster.
@@ -158,9 +162,12 @@ def _hotspot_distribution_map(
 
     s : float, default 4
         Spot size.
+
+    dpi : float, default 300
+        DPI for saved figure.
     """
 
-    fig, ax = plt.subplots(figsize=(10, 10), dpi=300)
+    fig, ax = plt.subplots(figsize=(10, 10), dpi=dpi)
     cluster = int(cluster)
 
     ax.set_title(f"Cluster {cluster} hotspot distribution")
@@ -195,6 +202,7 @@ def _spot_type_map(
     he_image: Optional[Union[str, Path]] = None,
     draw_uncertain: bool = True,
     s: float = 16,
+    dpi: float = 300,
 ) -> None:
     """
     Draw SVG type map.
@@ -222,6 +230,9 @@ def _spot_type_map(
 
     s : float, default 16
         Spot size.
+
+    dpi : float, default 300
+        DPI for saved figure.
     """
 
     if draw_uncertain:
@@ -247,7 +258,7 @@ def _spot_type_map(
     else:
         legend_fontsize = mpl.rcParams["legend.title_fontsize"]
 
-    fig, ax = plt.subplots(figsize=(10, 10), dpi=300)
+    fig, ax = plt.subplots(figsize=(10, 10), dpi=dpi)
     sc = ax.scatter(
         coordinate_df["X"],
         coordinate_df["Y"],
@@ -282,6 +293,7 @@ def svg_heatmap(
     save_path: Union[str, Path],
     he_image: Optional[Union[str, Path]] = None,
     s: float = 4,
+    dpi: float = 300,
 ) -> None:
     """
     Draw SVG distribution heatmap.
@@ -300,6 +312,9 @@ def svg_heatmap(
 
     s : float, default 4
         Spot size.
+
+    dpi : float, default 300
+        DPI for saved figure.
     """
     coor_df = dataset.coordinate_df
     if he_image is None:
@@ -309,9 +324,11 @@ def svg_heatmap(
         hotspot_df=dataset.hotspot_df,
         coordinate_df=coor_df,
         cluster_result=dataset.svg_cluster,
+        type_df=dataset.spot_type,
         save_path=save_path,
         he_image=he_image,
         s=s,
+        dpi=dpi,
     )
 
 
@@ -321,6 +338,7 @@ def hotspot_distribution_map(
     save_path: Union[str, Path],
     he_image: Optional[Union[str, Path]] = None,
     s: float = 4,
+    dpi: float = 300,
 ) -> None:
     """
     Draw hotspot distribution map for one SVG cluster.
@@ -342,6 +360,9 @@ def hotspot_distribution_map(
 
     s : float, default 4
         Spot size.
+
+    dpi : float, default 300
+        DPI for saved figure.
     """
     coor_df = dataset.coordinate_df
     if he_image is None:
@@ -355,6 +376,7 @@ def hotspot_distribution_map(
         save_path=save_path,
         he_image=he_image,
         s=s,
+        dpi=dpi,
     )
 
 
@@ -364,6 +386,7 @@ def spot_type_map(
     he_image: Optional[Union[str, Path]] = None,
     draw_uncertain: bool = True,
     s: float = 16,
+    dpi: float = 300,
 ) -> None:
     """
     Draw SVG type map.
@@ -385,6 +408,9 @@ def spot_type_map(
 
     s : float, default 16
         Spot size.
+
+    dpi : float, default 300
+        DPI for saved figure.
     """
     coor_df = dataset.coordinate_df
     if he_image is None:
@@ -398,4 +424,5 @@ def spot_type_map(
         he_image=he_image,
         draw_uncertain=draw_uncertain,
         s=s,
+        dpi=dpi,
     )
