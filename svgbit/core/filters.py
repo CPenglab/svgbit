@@ -20,16 +20,18 @@ def low_variance_filter(dataset: STDataset, var: float = 0) -> STDataset:
     Returns
     =======
     dataset : STDataset
-        A STDataset instance with filtered genes.
+        A new STDataset instance with filtered genes.
     """
     var_series = pd.Series()
     for gene in dataset.count_df.columns:
         var_series[gene] = dataset.count_df[gene].sparse.to_dense().var()
     var_series = var_series[var_series > var]
-    return STDataset(
+    return_dset = STDataset(
         dataset.count_df.reindex(columns=var_series.index),
         dataset.coordinate_df,
     )
+    return_dset._array_coordinate = dataset._array_coordinate
+    return return_dset
 
 
 def high_expression_filter(
@@ -51,7 +53,7 @@ def high_expression_filter(
     Returns
     =======
     dataset : STDataset
-        A STDataset instance with filtered genes.
+        A new STDataset instance with filtered genes.
     """
     temp_df = dataset.count_df.where(dataset.count_df < 1, 1)
     temp_series = temp_df.sum() / temp_df.shape[0]
@@ -60,7 +62,9 @@ def high_expression_filter(
         if temp_series[i] > max_ratio:
             drop_genes.append(i)
     count_df = dataset.count_df.drop(columns=drop_genes)
-    return STDataset(count_df, dataset.coordinate_df)
+    return_dset = STDataset(count_df, dataset.coordinate_df)
+    return_dset._array_coordinate = dataset._array_coordinate
+    return return_dset
 
 
 def quantile_filter(
@@ -81,10 +85,12 @@ def quantile_filter(
     Returns
     =======
     dataset : STDataset
-        A STDataset instance with filtered genes.
+        A new STDataset instance with filtered genes.
     """
     mean_series = dataset.count_df.mean()
     q = mean_series.quantile(quantile)
     remain_genes = mean_series[mean_series < q].index
     count_df = dataset.count_df.reindex(columns=remain_genes)
-    return STDataset(count_df, dataset.coordinate_df)
+    return_dset = STDataset(count_df, dataset.coordinate_df)
+    return_dset._array_coordinate = dataset._array_coordinate
+    return return_dset

@@ -301,13 +301,17 @@ def svg_heatmap(
     s : float, default 4
         Spot size.
     """
+    coor_df = dataset.coordinate_df
+    if he_image is None:
+        if dataset._array_coordinate is not None:
+            coor_df = dataset._array_coordinate
     _svg_heatmap(
-        dataset.hotspot_df,
-        dataset.coordinate_df,
-        dataset.svg_cluster,
-        save_path,
-        he_image,
-        s,
+        hotspot_df=dataset.hotspot_df,
+        coordinate_df=coor_df,
+        cluster_result=dataset.svg_cluster,
+        save_path=save_path,
+        he_image=he_image,
+        s=s,
     )
 
 
@@ -339,14 +343,18 @@ def hotspot_distribution_map(
     s : float, default 4
         Spot size.
     """
+    coor_df = dataset.coordinate_df
+    if he_image is None:
+        if dataset._array_coordinate is not None:
+            coor_df = dataset._array_coordinate
     _hotspot_distribution_map(
-        dataset.hotspot_df,
-        dataset.coordinate_df,
-        dataset.svg_cluster,
-        cluster,
-        save_path,
-        he_image,
-        s,
+        hotspot_df=dataset.hotspot_df,
+        coordinate_df=coor_df,
+        cluster_result=dataset.svg_cluster,
+        cluster=cluster,
+        save_path=save_path,
+        he_image=he_image,
+        s=s,
     )
 
 
@@ -378,12 +386,16 @@ def spot_type_map(
     s : float, default 16
         Spot size.
     """
+    coor_df = dataset.coordinate_df
+    if he_image is None:
+        if dataset._array_coordinate is not None:
+            coor_df = dataset._array_coordinate
     _spot_type_map(
-        dataset.hotspot_df,
-        dataset.coordinate_df,
-        dataset.spot_type,
-        save_path,
-        he_image,
-        draw_uncertain,
-        s,
+        hotspot_df=dataset.hotspot_df,
+        coordinate_df=coor_df,
+        type_df=dataset.spot_type,
+        save_path=save_path,
+        he_image=he_image,
+        draw_uncertain=draw_uncertain,
+        s=s,
     )

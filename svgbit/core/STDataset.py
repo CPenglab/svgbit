@@ -48,6 +48,7 @@ class STDataset(object):
         given to ``coordinate_df``.
 
     """
+
     def __init__(
         self,
         count_df: DataFrames,
@@ -71,6 +72,7 @@ class STDataset(object):
         self._Di: Optional[pd.DataFrame] = None
         self._svg_cluster: Optional[pd.Series] = None
         self._spot_type: Optional[pd.DataFrame] = None
+        self._array_coordinate: Optional[pd.DataFrame] = None
 
         # dataframes check
         if isinstance(count_df, pd.DataFrame):
@@ -150,6 +152,7 @@ class STDataset(object):
         del self._Di
         del self._svg_cluster
         del self._spot_type
+        del self._array_coordinate
 
     def acquire_weight(self, k: int = 6, **kwargs) -> None:
         """
@@ -209,8 +212,9 @@ class STDataset(object):
             knn=self._weight,
             cores=cores,
         )
-        self._AI = results[0]
-        self._Di = results[1].astype(pd.SparseDtype("float", 0))
+        self._AI = results[0].reindex(index=self.genes)
+        self._Di = results[1].astype(pd.SparseDtype("float", 0)).reindex(
+            index=self.spots, columns=self.genes)
 
     def find_clusters(
         self,
@@ -233,13 +237,15 @@ class STDataset(object):
             min value to identify multiple svg clusters to spot.
 
         """
-        self._svg_cluster, self._spot_type = cluster.cluster(
+        results = cluster.cluster(
             self._hotspot_df,
             self._AI,
             n_svgs=n_svgs,
             n_svg_clusters=n_svg_clusters,
             threshold=threshold,
         )
+        self._svg_cluster = results[0].reindex(index=self.genes)
+        self._spot_type = results[1].reindex(index=self.spots)
 
     @property
     def count_df(self) -> pd.DataFrame:
