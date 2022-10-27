@@ -323,7 +323,7 @@ def svg_heatmap(
         hotspot_df=dataset.hotspot_df,
         coordinate_df=coor_df,
         cluster_result=dataset.svg_cluster,
-        fpot_type=dataset.spot_type,
+        spot_type=dataset.spot_type,
         save_path=save_path,
         he_image=he_image,
         s=s,
