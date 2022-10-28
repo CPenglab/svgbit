@@ -4,6 +4,7 @@ import gzip
 from pathlib import Path
 
 import anndata
+import h5py
 import numpy as np
 import pandas as pd
 import scipy.io
@@ -160,5 +161,44 @@ def load_table(read_path, **kwargs) -> STDataset:
     count_df = pd.DataFrame.from_dict(count_dict).fillna(0).T
     coor_df = pd.DataFrame.from_dict(coor_dict).T
     coor_df = coor_df.reindex(index=count_df.index)
+
+    return STDataset(count_df, coor_df)
+
+
+def load_gef(read_path, slot="bin1") -> STDataset:
+    """
+    Load gef file and generate STDataset.
+
+    Parameters
+    ==========
+    read_path : str or pathlib.Path
+        File name to read from.
+
+    Returns
+    =======
+    dataset : STDataset
+        A STDataset instance generated from read_dir.
+    """
+    count_dict = {}
+    coor_dict = {}
+    f = h5py.File(read_path)
+    for record in f["geneExp"][slot]["gene"]:
+        gene_symbol = record[0].decode("utf8")
+        exp = f["geneExp"][slot]["expression"][record[1]:(record[2] - 1)]
+        for line in exp:
+            line = list(map(int, line))
+            spot_name = f"{line[0]}x{line[1]}"
+            if spot_name not in coor_dict.keys():
+                coor_dict[spot_name] = {"X": line[0], "Y": line[1]}
+            if spot_name not in count_dict.keys():
+                count_dict[spot_name] = {}
+            if gene_symbol not in count_dict[spot_name].keys():
+                count_dict[spot_name][gene_symbol] = line[2]
+            else:
+                count_dict[spot_name][gene_symbol] += line[2]
+    count_df = pd.DataFrame.from_dict(count_dict).fillna(0).T
+    coor_df = pd.DataFrame.from_dict(coor_dict).T
+    coor_df = coor_df.reindex(index=count_df.index)
+    f.close()
 
     return STDataset(count_df, coor_df)
