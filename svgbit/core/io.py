@@ -184,7 +184,9 @@ def load_gef(read_path, slot="bin1") -> STDataset:
     f = h5py.File(read_path)
     for record in f["geneExp"][slot]["gene"]:
         gene_symbol = record[0].decode("utf8")
-        exp = f["geneExp"][slot]["expression"][record[1]:(record[2] - 1)]
+        begin_line = record[1]
+        end_line = record[1] + record[2] - 1
+        exp = f["geneExp"][slot]["expression"][begin_line:end_line]
         for line in exp:
             line = list(map(int, line))
             spot_name = f"{line[0]}x{line[1]}"
@@ -201,4 +203,5 @@ def load_gef(read_path, slot="bin1") -> STDataset:
     coor_df = coor_df.reindex(index=count_df.index)
     f.close()
 
-    return STDataset(count_df, coor_df)
+    # return STDataset(count_df, coor_df)
+    return count_dict, coor_dict
