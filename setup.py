@@ -22,7 +22,7 @@ setup(
     discription="Find spatial variable genes for Spatial Trasncriptomics data.",
     long_description=long_description,
     url="https://github.com/CPenglab/svgbit",
-    license="MIT",
+    license="GPLv3",
     packages=find_packages(),
     include_package_data=True,
     install_requires=[
@@ -41,7 +41,7 @@ setup(
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Environment :: Console",
-        "License :: OSI Approved :: MIT License",
+        "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Operating System :: OS Independent",
         "Programming Language :: Python :: 3 :: Only",
         "Programming Language :: Python :: Implementation :: CPython",
