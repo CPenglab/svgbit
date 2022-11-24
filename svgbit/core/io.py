@@ -68,6 +68,7 @@ def load_10X(read_path) -> STDataset:
     coor_df.index.name = "barcode"
     coor_df.columns = ["X", "Y"]
     array_coor = array_coor.reindex(index=count_df.index)
+    array_coor.columns = ["X", "Y"]
     coor_df = coor_df.reindex(index=count_df.index)
 
     dataset = STDataset(count_df, coor_df)
@@ -165,7 +166,7 @@ def load_table(read_path, **kwargs) -> STDataset:
     return STDataset(count_df, coor_df)
 
 
-def load_gef(read_path, slot="bin1") -> STDataset:
+def load_gef(read_path, slot="bin20") -> STDataset:
     """
     Load gef file and generate STDataset.
 
@@ -203,5 +204,4 @@ def load_gef(read_path, slot="bin1") -> STDataset:
     coor_df = coor_df.reindex(index=count_df.index)
     f.close()
 
-    # return STDataset(count_df, coor_df)
-    return count_dict, coor_dict
+    return STDataset(count_df, coor_df)

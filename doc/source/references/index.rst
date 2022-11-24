@@ -24,7 +24,6 @@ Load dataset from disk
 
     load_10X
     load_anndata_h5
-    load_table
 
 
 
@@ -90,7 +89,6 @@ STDataset Methods
 
 
 
-
 STDataset Attributes
 ====================
 .. currentmodule:: svgbit
@@ -111,7 +109,6 @@ STDataset Attributes
     STDataset.spots
     STDataset.weight
     STDataset.weight_type
-
 
 
 
