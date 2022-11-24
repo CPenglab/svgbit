@@ -244,7 +244,7 @@ class STDataset(object):
             n_svg_clusters=n_svg_clusters,
             threshold=threshold,
         )
-        self._svg_cluster = results[0].reindex(index=self.genes)
+        self._svg_cluster = results[0]
         self._spot_type = results[1].reindex(index=self.spots)
 
     @property
