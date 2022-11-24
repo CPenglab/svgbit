@@ -75,6 +75,17 @@ Visualization
 
 
 
+Gene combinations
+=================
+.. currentmodule:: svgbit
+.. autosummary::
+    :toctree: _autosummary
+    :recursive:
+
+   find_combinations 
+
+
+
 STDataset Methods
 =================
 .. currentmodule:: svgbit

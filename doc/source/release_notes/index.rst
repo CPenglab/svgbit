@@ -4,6 +4,18 @@ Release notes
 
 
 
+0.2.7
+=====
+Release date:
+
+Find gene combinations with svgbit.
+
+Use sparse DataFrame.
+
+Minor fix.
+
+
+
 0.2.6
 =====
 Release date: Sept. 29, 2022
