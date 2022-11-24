@@ -4,9 +4,17 @@ Release notes
 
 
 
+0.2.8
+=====
+Release date: Nov. 24, 2022
+
+Bug fix.
+
+
+
 0.2.7
 =====
-Release date:
+Release date: Nov. 24, 2022
 
 Find gene combinations with svgbit.
 

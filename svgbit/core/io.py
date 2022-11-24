@@ -60,7 +60,7 @@ def load_10X(read_path) -> STDataset:
         coor_df = pd.read_csv(position_path, index_col=0, header=0)
         spaceranger_version = "v2"
     if spaceranger_version == "v1":
-        array_coor = coor_df[[2, 1]]
+        array_coor = coor_df[[3, 2]]
         coor_df = coor_df[[5, 4]]
     elif spaceranger_version == "v2":
         array_coor = coor_df[["array_row", "array_col"]]
