@@ -4,6 +4,14 @@ Release notes
 
 
 
+0.2.10
+======
+Release date: Dec. 6, 2022
+
+Rank cluster for gene pairs detection.
+
+
+
 0.2.9
 =====
 Release date: Nov. 24, 2022

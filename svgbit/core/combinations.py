@@ -4,6 +4,7 @@ from typing import Optional, Union
 import numpy as np
 import pandas as pd
 from sklearn.neighbors import NearestNeighbors
+from sklearn.mixture import BayesianGaussianMixture
 
 from .STDataset import STDataset
 
@@ -143,6 +144,31 @@ def _find_combinations(
             line += 1
             gene_pairs_df = pd.concat([gene_pairs_df, write_series])
     used_genes.append(gene_1)
+
+    gmm_con = BayesianGaussianMixture(
+        n_components=3,
+        max_iter=500,
+        n_init=5,
+    )
+    result_con = gmm_con.fit_predict(
+        gene_pairs_df["colocalization_score"].to_numpy().reshape(-1, 1))
+    rank_str = ["low", "middle", "high"]
+    mean_argsort = gmm_con.means_.argsort(axis=0).flatten()
+    rank_dict = {i: j for i, j in zip(mean_argsort, rank_str)}
+    result_con = [rank_dict[i] for i in result_con]
+    gene_pairs_df["colocalization_drgree"] = result_con
+
+    gmm_men = BayesianGaussianMixture(
+        n_components=3,
+        max_iter=500,
+        n_init=5,
+    )
+    result_men = gmm_men.fit_predict(
+        gene_pairs_df["exclusive_score"].to_numpy().reshape(-1, 1))
+    mean_argsort = gmm_men.means_.argsort(axis=0).flatten()
+    rank_dict = {i: j for i, j in zip(mean_argsort, rank_str)}
+    result_men = [rank_dict[i] for i in result_men]
+    gene_pairs_df["exclusive_drgree"] = result_men
 
     return gene_pairs_df
 
