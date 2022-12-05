@@ -156,7 +156,7 @@ def _find_combinations(
     mean_argsort = gmm_con.means_.argsort(axis=0).flatten()
     rank_dict = {i: j for i, j in zip(mean_argsort, rank_str)}
     result_con = [rank_dict[i] for i in result_con]
-    gene_pairs_df["colocalization_drgree"] = result_con
+    gene_pairs_df["colocalization_degree"] = result_con
 
     gmm_men = BayesianGaussianMixture(
         n_components=3,
@@ -168,7 +168,7 @@ def _find_combinations(
     mean_argsort = gmm_men.means_.argsort(axis=0).flatten()
     rank_dict = {i: j for i, j in zip(mean_argsort, rank_str)}
     result_men = [rank_dict[i] for i in result_men]
-    gene_pairs_df["exclusive_drgree"] = result_men
+    gene_pairs_df["exclusive_degree"] = result_men
 
     return gene_pairs_df
 
