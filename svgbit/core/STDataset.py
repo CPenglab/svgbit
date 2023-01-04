@@ -131,9 +131,13 @@ class STDataset(object):
         descr = f"STDataset with n_spots x n_genes = {self.n_spots} x {self.n_genes}"
         descr = f"{descr}\nApplied normalizers: {self._normalizer}"
         descr = f"{descr}\nAssigned attributes: "
+        flag = 0
         for attr in ["weight", "hotspot_df", "AI", "svg_cluster"]:
             if getattr(self, attr) is not None:
-                descr = f"{descr}, {attr}"
+                descr += f"{attr}, "
+                flag = 1
+        if flag:
+            descr = descr[:-2]
         return descr
 
     def __str__(self) -> str:
