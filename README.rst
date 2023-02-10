@@ -140,6 +140,16 @@ Parameter ``he_image`` is optional. If not specified, hotspot discription
 map will show without morphological information.
 
 
+Gene combinations
+-----------------
+Users may find gene combinations with::
+
+    sb.find_combinations(dataset, center_spots=1)
+
+to find gene combinations for SVG cluster 1. A ``pd.DataFrame`` with gene colocalization
+and exclusive result will be returned.
+
+
 Details about sb.run()
 ----------------------
 When you perform ``sb.run()``, sevaral steps will be done as below.
