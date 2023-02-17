@@ -4,6 +4,14 @@ Release notes
 
 
 
+0.2.11
+======
+Release date:
+
+getitem method for STDataset.
+
+
+
 0.2.10
 ======
 Release date: Dec. 6, 2022

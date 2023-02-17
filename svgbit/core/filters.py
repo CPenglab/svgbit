@@ -29,6 +29,8 @@ def low_variance_filter(dataset: STDataset, var: float = 0) -> STDataset:
     return_dset = STDataset(
         dataset.count_df.reindex(columns=var_series.index),
         dataset.coordinate_df,
+        check_duplicate_genes=False,
+        sort_spots=False,
     )
     return_dset._array_coordinate = dataset._array_coordinate
     return return_dset
@@ -62,15 +64,17 @@ def high_expression_filter(
         if temp_series[i] > max_ratio:
             drop_genes.append(i)
     count_df = dataset.count_df.drop(columns=drop_genes)
-    return_dset = STDataset(count_df, dataset.coordinate_df)
+    return_dset = STDataset(
+        count_df,
+        dataset.coordinate_df,
+        check_duplicate_genes=False,
+        sort_spots=False,
+    )
     return_dset._array_coordinate = dataset._array_coordinate
     return return_dset
 
 
-def quantile_filter(
-    dataset: STDataset,
-    quantile: float = 0.99
-) -> STDataset:
+def quantile_filter(dataset: STDataset, quantile: float = 0.99) -> STDataset:
     """
     Filter genes with quantile.
 
@@ -91,6 +95,11 @@ def quantile_filter(
     q = mean_series.quantile(quantile)
     remain_genes = mean_series[mean_series < q].index
     count_df = dataset.count_df.reindex(columns=remain_genes)
-    return_dset = STDataset(count_df, dataset.coordinate_df)
+    return_dset = STDataset(
+        count_df,
+        dataset.coordinate_df,
+        check_duplicate_genes=False,
+        sort_spots=False,
+    )
     return_dset._array_coordinate = dataset._array_coordinate
     return return_dset

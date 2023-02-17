@@ -11,7 +11,7 @@ import scipy.io
 from .STDataset import STDataset
 
 
-def load_10X(read_path) -> STDataset:
+def load_10X(read_path, make_sparse=True) -> STDataset:
     """
     Load 10X Genomics Space Ranger outputs and generate STDataset.
 
@@ -21,6 +21,9 @@ def load_10X(read_path) -> STDataset:
         A location points to 10X outs dir. Assume directories
         ``filtered_feature_bc_matrix`` and ``spatial`` are in this
         path.
+
+    make_sparse : bool, default True
+        Whether to use sparse DataFrame in order to save memory.
 
     Returns
     =======
@@ -71,7 +74,9 @@ def load_10X(read_path) -> STDataset:
     array_coor.columns = ["X", "Y"]
     coor_df = coor_df.reindex(index=count_df.index)
 
-    dataset = STDataset(count_df, coor_df)
+    if not make_sparse:
+        count_df = count_df.sparse.to_dense()
+    dataset = STDataset(count_df, coor_df, make_sparse=make_sparse)
     dataset._array_coordinate = array_coor
     return dataset
 

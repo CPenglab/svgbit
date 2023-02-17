@@ -47,8 +47,15 @@ class STDataset(object):
         Keyword arguments pass to ``pandas.read_csv`` if ``str`` or ``Path`` is
         given to ``coordinate_df``.
 
-    """
+    make_sparse : bool, default True
+        Whether to use sparse DataFrame in order to save memory.
 
+    check_duplicate_genes : bool, default True
+        Whether to check duplicated gene names.
+
+    sort_spots : bool, default True
+        Whether to sort spots with spots' name.
+    """
     def __init__(
         self,
         count_df: DataFrames,
@@ -57,6 +64,9 @@ class STDataset(object):
         coordinate_transpose: bool = False,
         count_df_kwargs: dict = {},
         coordinate_df_kwargs: dict = {},
+        make_sparse: bool = True,
+        check_duplicate_genes: bool = True,
+        sort_spots: bool = True,
     ) -> None:
 
         # attributes initial
@@ -96,8 +106,10 @@ class STDataset(object):
         if coordinate_transpose:
             self._coordinate_df = self._coordinate_df.T
 
-        self._count_df.sort_index(inplace=True)
-        self._coordinate_df.sort_index(inplace=True)
+        if sort_spots:
+            self._count_df.sort_index(inplace=True)
+            self._coordinate_df = self._coordinate_df.reindex(
+                index=self.count_df.index)
         self._coordinate_df.columns = ["X", "Y"]
 
         err = "Expression matrix and coordinate file have different number of spots."
@@ -106,26 +118,24 @@ class STDataset(object):
         assert all(self._count_df.index == self._coordinate_df.index), err
 
         # Rename duplicated columns
-        genes = []
-        flag = 0
-        for gene_name in self._count_df.columns:
-            while 1:
-                if gene_name in genes:
-                    gene_name += "*"
-                    flag += 1
-                else:
-                    break
-            genes.append(gene_name)
-        if flag:
-            self._count_df.columns = genes
-            print("Duplicated column names found. Auto rename.")
-            warnings.warn("Duplicated column names found. Auto rename.")
+        if check_duplicate_genes:
+            genes = []
+            flag = 0
+            for gene_name in self._count_df.columns:
+                while 1:
+                    if gene_name in genes:
+                        gene_name += "*"
+                        flag += 1
+                    else:
+                        break
+                genes.append(gene_name)
+            if flag:
+                self._count_df.columns = genes
+                print("Duplicated column names found. Auto rename.")
+                warnings.warn("Duplicated column names found. Auto rename.")
 
-        if isinstance(self._count_df.iloc[0, 0], int):
-            dt = "int64"
-        else:
-            dt = "float64"
-        self._count_df = self._count_df.astype(pd.SparseDtype(dt, 0))
+        if make_sparse:
+            self.to_sparse()
 
     def __repr__(self) -> str:
         descr = f"STDataset with n_spots x n_genes = {self.n_spots} x {self.n_genes}"
@@ -143,6 +153,23 @@ class STDataset(object):
     def __str__(self) -> str:
         return self.__repr__()
 
+    def __getitem__(self, pos) -> STDataset:
+        """
+        Return a sub STDataset instance with empty attributes.
+        """
+        try:
+            count_sub = self.count_df.loc[pos]
+        except TypeError:
+            count_sub = self.count_df.iloc[pos]
+        coor_sub = self.coordinate_df.loc[count_sub.index, ]
+        return STDataset(
+            count_sub,
+            coor_sub,
+            check_duplicate_genes=False,
+            sort_spots=False,
+            make_sparse=pd.api.types.is_sparse(self.count_df.iloc[:, 1]),
+        )
+
     def __del__(self) -> None:
         del self._count_df
         del self._coordinate_df
@@ -157,6 +184,19 @@ class STDataset(object):
         del self._svg_cluster
         del self._spot_type
         del self._array_coordinate
+
+    def to_dense(self) -> None:
+        """Convert count_df with sparse values to dense."""
+        self._count_df = self._count_df.sparse.to_dense()
+
+    def to_sparse(self) -> None:
+        """Convert count_df with dense values to sparse."""
+        is_int = [i == "int" for i in self.count_df.dtypes]
+        if all(is_int):
+            dt = "int64"
+        else:
+            dt = "float64"
+        self._count_df = self._count_df.astype(pd.SparseDtype(dt, 0))
 
     def acquire_weight(self, k: int = 6, **kwargs) -> None:
         """
