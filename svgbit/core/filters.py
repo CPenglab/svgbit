@@ -24,7 +24,10 @@ def low_variance_filter(dataset: STDataset, var: float = 0) -> STDataset:
     """
     var_series = pd.Series()
     for gene in dataset.count_df.columns:
-        var_series[gene] = dataset.count_df[gene].sparse.to_dense().var()
+        try:
+            var_series[gene] = dataset.count_df[gene].sparse.to_dense().var()
+        except AttributeError:
+            var_series[gene] = dataset.count_df[gene].var()
     var_series = var_series[var_series > var]
     return_dset = STDataset(
         dataset.count_df.reindex(columns=var_series.index),
