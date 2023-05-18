@@ -1,7 +1,8 @@
 from __future__ import annotations
 
-from copy import deepcopy
 import warnings
+from collections import Counter
+from copy import deepcopy
 from typing import Optional, Tuple, Union
 from pathlib import Path
 
@@ -121,13 +122,16 @@ class STDataset(object):
         if check_duplicate_genes:
             genes = []
             flag = 0
+            c = Counter(self._count_df.columns)
+            gene_suffix = {}
             for gene_name in self._count_df.columns:
-                while 1:
-                    if gene_name in genes:
-                        gene_name += "*"
-                        flag += 1
+                if c[gene_name] > 1:
+                    flag = 1
+                    if gene_name in gene_suffix:
+                        gene_suffix[gene_name] += 1
+                        gene_name += f".{gene_suffix[gene_name]}"
                     else:
-                        break
+                        gene_suffix[gene_name] = 0
                 genes.append(gene_name)
             if flag:
                 self._count_df.columns = genes

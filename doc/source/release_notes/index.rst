@@ -10,6 +10,9 @@ Release date:
 
 getitem method for STDataset.
 
+Deduplicate gene names process now follows behavior of ``make.unique()``
+function in ``R``.
+
 
 
 0.2.10
