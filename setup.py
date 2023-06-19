@@ -29,7 +29,6 @@ setup(
         "setuptools",
         "anndata>=0.8.0",
         "matplotlib>=3.5.1",
-        "pandana>=0.6.1",
         "pysal>=2.4.0",
         "pillow>=9.2.0",
         "seaborn>=0.11.2",
