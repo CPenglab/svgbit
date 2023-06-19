@@ -6,7 +6,7 @@ Release notes
 
 0.2.11
 ======
-Release date:
+Release date: Jun. 19, 2023
 
 getitem method for STDataset.
 
