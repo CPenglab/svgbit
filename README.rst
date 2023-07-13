@@ -6,6 +6,10 @@ svgbit quickstart
 
 For further detail, please visit our `API reference`_ on readthedocs.org
 
+Folder ``slides`` contains 10X Visium slide layout GPR files used in our
+publication. Please refer to our paper's supplementary table 1 for sample
+index.
+
 
 
 Installation
@@ -112,7 +116,7 @@ Genes with extremely high expressions usually show no pattern and may
 distrub performing. Filter with::
 
     dataset = sb.filters.quantile_filter(dataset, 0.99)
-   
+
 svgbit alse has count normalization functions::
 
     dataset = sb.normalizers.logcpm_normailzer(dataset)

@@ -112,7 +112,7 @@ Genes with extremely high expressions usually show no pattern and may
 distrub performing. Filter with::
 
     dataset = sb.filters.quantile_filter(dataset, 0.99)
-   
+
 svgbit alse has count normalization functions::
 
     dataset = sb.normalizers.logcpm_normailzer(dataset)
