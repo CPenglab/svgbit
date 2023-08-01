@@ -208,6 +208,7 @@ our manuscript.
 
 Citation
 ========
+Hong, Y., Song, K., Zhang, Z. et al. The spatiotemporal dynamics of spatially variable genes in developing mouse brain revealed by a novel computational scheme. Cell Death Discov. 9, 264 (2023). https://doi.org/10.1038/s41420-023-01569-w
 
 
 
