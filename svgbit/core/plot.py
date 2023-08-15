@@ -254,6 +254,66 @@ def _hotspot_expression(
     fig.savefig(save_path, bbox_inches="tight")
     plt.close(fig)
 
+def _gene_expression(
+    count_df: pd.DataFrame,
+    coordinate_df: pd.DataFrame,
+    gene: str,
+    save_path: Union[str, Path],
+    he_image: Optional[Union[str, Path]] = None,
+    s: float = 4,
+    dpi: float = 300,
+) -> None:
+    """
+    Draw expression for one gene.
+
+    Parameters
+    ==========
+    count_df : pd.DataFrame
+        A pd.DataFrame for hotspots.
+
+    coordinate_df : pd.DataFrame
+        A pd.DataFrame for coordinate files.
+
+    gene : str
+        Which gene to draw.
+
+    save_path : str or pathlib.Path
+        Heatmap save path.
+
+    he_image : str or pathlib.Path, default None
+        H&E image of tissue. If None is given (default), distribution map
+        will not show tissue picture.
+
+    s : float, default 4
+        Spot size.
+
+    dpi : float, default 300
+        DPI for saved figure.
+    """
+    fig, ax = plt.subplots(figsize=(10, 10), dpi=dpi)
+
+    ax.set_title(gene)
+    ax.set_xticks([])
+    ax.set_yticks([])
+    ax.axis("off")
+    sc = ax.scatter(
+        coordinate_df.iloc[:, 0],
+        coordinate_df.iloc[:, 1],
+        c=expression_df[gene],
+        cmap="autumn_r",
+        vmin=0,
+        vmax=1,
+        s=s,
+        alpha=0.7,
+    )
+    fig.colorbar(sc)
+
+    if he_image is not None:
+        with Image.open(he_image) as he_image:
+            ax.imshow(he_image)
+
+    fig.savefig(save_path, bbox_inches="tight")
+    plt.close(fig)
 
 def _spot_type_map(
     hotspot_df: pd.DataFrame,
@@ -478,6 +538,52 @@ def hotspot_expression(
             coor_df = dataset._array_coordinate
     _hotspot_expression(
         hotspot_df=dataset.hotspot_df,
+        coordinate_df=coor_df,
+        gene=gene,
+        save_path=save_path,
+        he_image=he_image,
+        s=s,
+        dpi=dpi,
+    )
+
+def gene_expression(
+    dataset: STDataset,
+    gene: str,
+    save_path: Union[str, Path],
+    he_image: Optional[Union[str, Path]] = None,
+    s: float = 4,
+    dpi: float = 300,
+) -> None:
+    """
+    Draw expression for one gene.
+
+    Parameters
+    ==========
+    dataset : STDataset
+        A STDataset with hotspot and SVG cluster estimation finished.
+
+    gene : str
+        Which gene to draw.
+
+    save_path : str or pathlib.Path
+        Heatmap save path.
+
+    he_image : str or pathlib.Path, default None
+        H&E image of tissue. If None is given (default), distribution map
+        will not show tissue picture.
+
+    s : float, default 4
+        Spot size.
+
+    dpi : float, default 300
+        DPI for saved figure.
+    """
+    coor_df = dataset.coordinate_df
+    if he_image is None:
+        if dataset._array_coordinate is not None:
+            coor_df = dataset._array_coordinate
+    _gene_expression(
+        count_df=dataset.count_df,
         coordinate_df=coor_df,
         gene=gene,
         save_path=save_path,
