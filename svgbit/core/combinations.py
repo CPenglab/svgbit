@@ -126,12 +126,9 @@ def _find_combinations(
         "exclusive_score"
     ])
     line = 0
-    used_genes = []
     for gene_1 in con_ratio.columns:
         for gene_2 in con_ratio.index:
             if gene_1 == gene_2:
-                continue
-            if gene_1 in used_genes:
                 continue
             write_dict = {
                 "SVG_cluster": center_spots,
@@ -143,7 +140,8 @@ def _find_combinations(
             write_series = pd.Series(write_dict, name=line).to_frame().T
             line += 1
             gene_pairs_df = pd.concat([gene_pairs_df, write_series])
-    used_genes.append(gene_1)
+
+    gene_pairs_df.fillna(0, inplace=True)
 
     gmm_con = BayesianGaussianMixture(
         n_components=3,
