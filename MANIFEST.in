@@ -1,6 +1,7 @@
 exclude .readthedocs.yaml
+
 prune venv
-prune doc/build
+prune doc
 prune slides
 
 global-exclude *.bz2
