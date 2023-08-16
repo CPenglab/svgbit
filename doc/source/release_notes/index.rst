@@ -6,7 +6,7 @@ Release notes
 
 0.2.12
 ======
-Release date:
+Release date: Aug. 16, 2023
 
 Add plot functions.
 
