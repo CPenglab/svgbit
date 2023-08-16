@@ -255,7 +255,7 @@ def _hotspot_expression(
     plt.close(fig)
 
 def _gene_expression(
-    count_df: pd.DataFrame,
+    expression_df: pd.DataFrame,
     coordinate_df: pd.DataFrame,
     gene: str,
     save_path: Union[str, Path],
@@ -583,7 +583,7 @@ def gene_expression(
         if dataset._array_coordinate is not None:
             coor_df = dataset._array_coordinate
     _gene_expression(
-        count_df=dataset.count_df,
+        expression_df=dataset.count_df,
         coordinate_df=coor_df,
         gene=gene,
         save_path=save_path,

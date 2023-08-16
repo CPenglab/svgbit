@@ -102,7 +102,11 @@ def _find_combinations(
     else:
         if isinstance(center_spots, list):
             selected_spots = center_spots
-            center_spots = ", ".join(center_spots)
+            if len(center_spots) <= 10:
+                center_spots = ", ".join(center_spots)
+            else:
+                center_spots = ", ".join(center_spots[:3])
+                center_spots = center_spots + "..."
         else:
             selected_spots = spot_type[spot_type["type_1"] ==
                                        center_spots].index
