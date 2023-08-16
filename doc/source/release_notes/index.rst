@@ -8,6 +8,14 @@ Release notes
 ======
 Release date: Aug. 16, 2023
 
+Use MANIFEST.in
+
+
+
+0.2.13
+======
+Release date: Aug. 16, 2023
+
 Migrate setup.py to pyproject.toml
 
 
