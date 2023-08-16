@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "svgbit"
+authors = [{name = "CPenglab", email = "chengpeng@ynu.edu.cn"}]
+description = "Find spatial variable genes for Spatial Trasncriptomics data."
+readme = "README.rst"
+requires-python = ">=3.8"
+license = {text = "GPLv3"}
+urls = [{
+    "documentation" = "https://svgbit.readthedocs.io",
+    "repository" = "https://github.com/CPenglab/svgbit"
+}]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+]
+dependencies = [
+    "anndata>=0.8.0",
+    "matplotlib>=3.5.1",
+    "pysal>=2.4.0",
+    "pillow>=9.2.0",
+    "seaborn>=0.11.2",
+]
+dynamic = ["version"]
+scripts = [{"svgbit" = "svgbit.__main__:main"}]
+
+[tool.setuptools_scm]
+include_package_data = False

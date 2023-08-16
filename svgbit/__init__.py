@@ -1,3 +1,5 @@
+from importlib.metadata import version, PackageNotFoundError
+
 from .core.STDataset import STDataset
 from .run import run
 
@@ -5,7 +7,10 @@ from .core.io import load_10X, load_anndata_h5, load_table
 from .core.combinations import find_combinations
 from . import filters, normalizers, plot
 
-from ._version import __version__
+try:
+    __version__ = version("svgbit")
+except PackageNotFoundError:
+    __version__ = "unknown version"
 
 __all__ = [
     "STDataset",

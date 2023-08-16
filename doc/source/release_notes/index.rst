@@ -4,6 +4,14 @@ Release notes
 
 
 
+0.2.13
+======
+Release date: Aug. 16, 2023
+
+Migrate setup.py to pyproject.toml
+
+
+
 0.2.12
 ======
 Release date: Aug. 16, 2023
