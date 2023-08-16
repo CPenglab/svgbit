@@ -9,10 +9,6 @@ description = "Find spatial variable genes for Spatial Trasncriptomics data."
 readme = "README.rst"
 requires-python = ">=3.8"
 license = {text = "GPLv3"}
-urls = [{
-    "documentation" = "https://svgbit.readthedocs.io",
-    "repository" = "https://github.com/CPenglab/svgbit"
-}]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Environment :: Console",
@@ -30,7 +26,18 @@ dependencies = [
     "seaborn>=0.11.2",
 ]
 dynamic = ["version"]
-scripts = [{"svgbit" = "svgbit.__main__:main"}]
+
+[project.scripts]
+svgbit = "svgbit.__main__:main"
+
+[project.urls]
+documentation = "https://svgbit.readthedocs.io"
+repository = "https://github.com/CPenglab/svgbit"
+
+[tool.setuptools]
+include-package-data = false
+
+[tool.setuptools.packages.find]
+where = ["svgbit"]
 
 [tool.setuptools_scm]
-include_package_data = False
