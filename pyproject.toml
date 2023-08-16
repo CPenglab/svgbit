@@ -38,6 +38,6 @@ repository = "https://github.com/CPenglab/svgbit"
 include-package-data = false
 
 [tool.setuptools.packages.find]
-where = ["svgbit"]
+exclude = ["doc", "slides"]
 
 [tool.setuptools_scm]
