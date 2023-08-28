@@ -67,14 +67,16 @@ def _svg_heatmap(
     spacing, cluster_width = 0.03, 0.22
     rect_heatmap = [left + spacing, bottom + spacing * 2, width, height]
 
-    fig = plt.figure(figsize=(10, 10), dpi=dpi)
-    ax_heatmap = fig.add_axes(rect_heatmap)
-
     he_close = False
+    figsize = (10, 10)
     if he_image is not None:
         if not isinstance(he_image, Image.Image):
             he_close = True
             he_image = Image.open(he_image)
+            figsize = (10, he_image.height / he_image.width * 10)
+
+    fig = plt.figure(figsize=figsize, dpi=dpi)
+    ax_heatmap = fig.add_axes(rect_heatmap)
 
     for i, j in enumerate(set(cluster_result.values)):
         rect_cluster = [
@@ -182,8 +184,16 @@ def _hotspot_distribution_map(
     fig : matplotlib.figure.Figure
         A matplotlib.figure.Figure plot.
     """
+    he_close = False
+    figsize = (10, 10)
+    if he_image is not None:
+        if not isinstance(he_image, Image.Image):
+            he_close = True
+            he_image = Image.open(he_image)
+            figsize = (10, he_image.height / he_image.width * 10)
 
-    fig, ax = plt.subplots(figsize=(10, 10), dpi=dpi)
+    fig, ax = plt.subplots(figsize=figsize, dpi=dpi)
+
     cluster = int(cluster)
 
     ax.set_title(f"Cluster {cluster} hotspot distribution")
@@ -202,12 +212,7 @@ def _hotspot_distribution_map(
     )
     fig.colorbar(sc)
 
-    he_close = False
-    if he_image is not None:
-        if not isinstance(he_image, Image.Image):
-            he_close = True
-            he_image = Image.open(he_image)
-        ax.imshow(he_image)
+    ax.imshow(he_image) if he_image is not None else None
 
     if save_path is not None:
         fig.savefig(save_path, bbox_inches="tight")
@@ -258,7 +263,15 @@ def _hotspot_expression(
     fig : matplotlib.figure.Figure
         A matplotlib.figure.Figure plot.
     """
-    fig, ax = plt.subplots(figsize=(10, 10), dpi=dpi)
+    he_close = False
+    figsize = (10, 10)
+    if he_image is not None:
+        if not isinstance(he_image, Image.Image):
+            he_close = True
+            he_image = Image.open(he_image)
+            figsize = (10, he_image.height / he_image.width * 10)
+
+    fig, ax = plt.subplots(figsize=figsize, dpi=dpi)
 
     ax.set_title(gene)
     ax.set_xticks([])
@@ -276,12 +289,7 @@ def _hotspot_expression(
     )
     fig.colorbar(sc)
 
-    he_close = False
-    if he_image is not None:
-        if not isinstance(he_image, Image.Image):
-            he_close = True
-            he_image = Image.open(he_image)
-        ax.imshow(he_image)
+    ax.imshow(he_image) if he_image is not None else None
 
     if save_path is not None:
         fig.savefig(save_path, bbox_inches="tight")
@@ -332,7 +340,16 @@ def _hotspot_colocalization_map(
     fig : matplotlib.figure.Figure
         A matplotlib.figure.Figure plot.
     """
-    fig, ax = plt.subplots(figsize=(10, 10), dpi=dpi)
+    he_close = False
+    figsize = (10, 10)
+    if he_image is not None:
+        if not isinstance(he_image, Image.Image):
+            he_close = True
+            he_image = Image.open(he_image)
+            figsize = (10, he_image.height / he_image.width * 10)
+
+    fig, ax = plt.subplots(figsize=figsize, dpi=dpi)
+
     hotspot_df = hotspot_df.copy().sparse.to_dense()
 
     if len(genes) <= 3:
@@ -383,12 +400,7 @@ def _hotspot_colocalization_map(
 
     ax.legend(markerscale=2)
 
-    he_close = False
-    if he_image is not None:
-        if not isinstance(he_image, Image.Image):
-            he_close = True
-            he_image = Image.open(he_image)
-        ax.imshow(he_image)
+    ax.imshow(he_image) if he_image is not None else None
 
     if save_path is not None:
         fig.savefig(save_path, bbox_inches="tight")
@@ -439,7 +451,15 @@ def _gene_expression(
     fig : matplotlib.figure.Figure
         A matplotlib.figure.Figure plot.
     """
-    fig, ax = plt.subplots(figsize=(10, 10), dpi=dpi)
+    he_close = False
+    figsize = (10, 10)
+    if he_image is not None:
+        if not isinstance(he_image, Image.Image):
+            he_close = True
+            he_image = Image.open(he_image)
+            figsize = (10, he_image.height / he_image.width * 10)
+
+    fig, ax = plt.subplots(figsize=figsize, dpi=dpi)
 
     ax.set_title(gene)
     ax.set_xticks([])
@@ -455,12 +475,7 @@ def _gene_expression(
     )
     fig.colorbar(sc)
 
-    he_close = False
-    if he_image is not None:
-        if not isinstance(he_image, Image.Image):
-            he_close = True
-            he_image = Image.open(he_image)
-        ax.imshow(he_image)
+    ax.imshow(he_image) if he_image is not None else None
 
     if save_path is not None:
         fig.savefig(save_path, bbox_inches="tight")
@@ -539,7 +554,15 @@ def _spot_type_map(
     else:
         legend_fontsize = mpl.rcParams["legend.title_fontsize"]
 
-    fig, ax = plt.subplots(figsize=(10, 10), dpi=dpi)
+    figsize = (10, 10)
+    if he_image is not None:
+        if not isinstance(he_image, Image.Image):
+            he_close = True
+            he_image = Image.open(he_image)
+            figsize = (10, he_image.height / he_image.width * 10)
+
+    fig, ax = plt.subplots(figsize=figsize, dpi=dpi)
+
     sc = ax.scatter(
         coordinate_df["X"],
         coordinate_df["Y"],
@@ -561,12 +584,7 @@ def _spot_type_map(
     ax.set_yticks([])
     ax.set_title("Spot type map", fontsize=legend_fontsize)
 
-    he_close = False
-    if he_image is not None:
-        if not isinstance(he_image, Image.Image):
-            he_close = True
-            he_image = Image.open(he_image)
-        ax.imshow(he_image)
+    ax.imshow(he_image) if he_image is not None else None
 
     if save_path is not None:
         fig.savefig(save_path, bbox_inches="tight")
