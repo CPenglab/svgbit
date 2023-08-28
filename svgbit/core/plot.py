@@ -20,11 +20,11 @@ def _svg_heatmap(
     coordinate_df: pd.DataFrame,
     cluster_result: pd.Series,
     spot_type: pd.DataFrame,
-    save_path: Union[str, Path],
-    he_image: Optional[Union[str, Path]] = None,
+    save_path: Optional[Union[str, Path]] = None,
+    he_image: Optional[Union[str, Path, Image.Image]] = None,
     s: float = 4,
     dpi: float = 300,
-) -> None:
+) -> mpl.figure.Figure:
     """
     Draw SVG distribution heatmap.
 
@@ -42,10 +42,10 @@ def _svg_heatmap(
     spot_type : pd.DataFrame
         A pd.DataFrame for assigned type_df.
 
-    save_path : str or pathlib.Path
-        Heatmap save path.
+    save_path : str or pathlib.Path, default None
+        Heatmap save path. If None, plot will not save.
 
-    he_image : str or pathlib.Path, default None
+    he_image : str, pathlib.Path or PIL.Image.Image, default None
         H&E image of tissue. If None is given (default), distribution map
         will not show tissue picture.
 
@@ -54,8 +54,12 @@ def _svg_heatmap(
 
     dpi : float, default 300
         DPI for saved figure.
-    """
 
+    Returns
+    =======
+    fig : matplotlib.figure.Figure
+        A matplotlib.figure.Figure plot.
+    """
     spot_type = spot_type.sort_values(by="type_1")
 
     left, bottom = 0.1, 0.1
@@ -66,8 +70,11 @@ def _svg_heatmap(
     fig = plt.figure(figsize=(10, 10), dpi=dpi)
     ax_heatmap = fig.add_axes(rect_heatmap)
 
+    he_close = False
     if he_image is not None:
-        he_image = Image.open(he_image)
+        if not isinstance(he_image, Image.Image):
+            he_close = True
+            he_image = Image.open(he_image)
 
     for i, j in enumerate(set(cluster_result.values)):
         rect_cluster = [
@@ -122,9 +129,12 @@ def _svg_heatmap(
     ax_heatmap.set_xlabel("Genes")
     ax_heatmap.set_ylabel("Spots")
 
-    fig.savefig(save_path, bbox_inches="tight")
-    plt.close(fig)
-    he_image.close() if he_image is not None else None
+    if save_path is not None:
+        fig.savefig(save_path, bbox_inches="tight")
+
+    he_image.close() if he_close else None
+
+    return fig
 
 
 def _hotspot_distribution_map(
@@ -132,11 +142,11 @@ def _hotspot_distribution_map(
     coordinate_df: pd.DataFrame,
     cluster_result: pd.Series,
     cluster: Union[str, int],
-    save_path: Union[str, Path],
-    he_image: Optional[Union[str, Path]] = None,
+    save_path: Optional[Union[str, Path]] = None,
+    he_image: Optional[Union[str, Path, Image.Image]] = None,
     s: float = 4,
     dpi: float = 300,
-) -> None:
+) -> mpl.figure.Figure:
     """
     Draw hotspot distribution map for one SVG cluster.
 
@@ -154,10 +164,10 @@ def _hotspot_distribution_map(
     cluster : str or int
         Specify drawing cluster.
 
-    save_path : str or pathlib.Path
-        Heatmap save path.
+    save_path : str or pathlib.Path, default None
+        Heatmap save path. If None, plot will not save.
 
-    he_image : str or pathlib.Path, default None
+    he_image : str, pathlib.Path or PIL.Image.Image, default None
         H&E image of tissue. If None is given (default), distribution map
         will not show tissue picture.
 
@@ -166,6 +176,11 @@ def _hotspot_distribution_map(
 
     dpi : float, default 300
         DPI for saved figure.
+
+    Returns
+    =======
+    fig : matplotlib.figure.Figure
+        A matplotlib.figure.Figure plot.
     """
 
     fig, ax = plt.subplots(figsize=(10, 10), dpi=dpi)
@@ -187,23 +202,30 @@ def _hotspot_distribution_map(
     )
     fig.colorbar(sc)
 
+    he_close = False
     if he_image is not None:
-        with Image.open(he_image) as he_image:
-            ax.imshow(he_image)
+        if not isinstance(he_image, Image.Image):
+            he_close = True
+            he_image = Image.open(he_image)
+        ax.imshow(he_image)
 
-    fig.savefig(save_path, bbox_inches="tight")
-    plt.close(fig)
+    if save_path is not None:
+        fig.savefig(save_path, bbox_inches="tight")
+
+    he_image.close() if he_close else None
+
+    return fig
 
 
 def _hotspot_expression(
     hotspot_df: pd.DataFrame,
     coordinate_df: pd.DataFrame,
     gene: str,
-    save_path: Union[str, Path],
-    he_image: Optional[Union[str, Path]] = None,
+    save_path: Optional[Union[str, Path]] = None,
+    he_image: Optional[Union[str, Path, Image.Image]] = None,
     s: float = 4,
     dpi: float = 300,
-) -> None:
+) -> mpl.figure.Figure:
     """
     Draw hotspot expression for one gene.
 
@@ -218,10 +240,10 @@ def _hotspot_expression(
     gene : str
         Which gene to draw.
 
-    save_path : str or pathlib.Path
-        Heatmap save path.
+    save_path : str or pathlib.Path, default None
+        Heatmap save path. If None, plot will not save.
 
-    he_image : str or pathlib.Path, default None
+    he_image : str, pathlib.Path or PIL.Image.Image, default None
         H&E image of tissue. If None is given (default), distribution map
         will not show tissue picture.
 
@@ -230,6 +252,11 @@ def _hotspot_expression(
 
     dpi : float, default 300
         DPI for saved figure.
+
+    Returns
+    =======
+    fig : matplotlib.figure.Figure
+        A matplotlib.figure.Figure plot.
     """
     fig, ax = plt.subplots(figsize=(10, 10), dpi=dpi)
 
@@ -249,23 +276,30 @@ def _hotspot_expression(
     )
     fig.colorbar(sc)
 
+    he_close = False
     if he_image is not None:
-        with Image.open(he_image) as he_image:
-            ax.imshow(he_image)
+        if not isinstance(he_image, Image.Image):
+            he_close = True
+            he_image = Image.open(he_image)
+        ax.imshow(he_image)
 
-    fig.savefig(save_path, bbox_inches="tight")
-    plt.close(fig)
+    if save_path is not None:
+        fig.savefig(save_path, bbox_inches="tight")
+
+    he_image.close() if he_close else None
+
+    return fig
 
 
 def _hotspot_colocalization_map(
     hotspot_df: pd.DataFrame,
     coordinate_df: pd.DataFrame,
     genes: list,
-    save_path: Union[str, Path],
-    he_image: Optional[Union[str, Path]] = None,
+    save_path: Optional[Union[str, Path]] = None,
+    he_image: Optional[Union[str, Path, Image.Image]] = None,
     s: float = 4,
     dpi: float = 300,
-) -> None:
+) -> mpl.figure.Figure:
     """
     Draw hotspot expression for multiple genes.
 
@@ -280,10 +314,10 @@ def _hotspot_colocalization_map(
     genes : str
         Which genes to draw.
 
-    save_path : str or pathlib.Path
-        Heatmap save path.
+    save_path : str or pathlib.Path, default None
+        Heatmap save path. If None, plot will not save.
 
-    he_image : str or pathlib.Path, default None
+    he_image : str, pathlib.Path or PIL.Image.Image, default None
         H&E image of tissue. If None is given (default), distribution map
         will not show tissue picture.
 
@@ -292,6 +326,11 @@ def _hotspot_colocalization_map(
 
     dpi : float, default 300
         DPI for saved figure.
+
+    Returns
+    =======
+    fig : matplotlib.figure.Figure
+        A matplotlib.figure.Figure plot.
     """
     fig, ax = plt.subplots(figsize=(10, 10), dpi=dpi)
     hotspot_df = hotspot_df.copy().sparse.to_dense()
@@ -344,23 +383,30 @@ def _hotspot_colocalization_map(
 
     ax.legend(markerscale=2)
 
+    he_close = False
     if he_image is not None:
-        with Image.open(he_image) as he_image:
-            ax.imshow(he_image)
+        if not isinstance(he_image, Image.Image):
+            he_close = True
+            he_image = Image.open(he_image)
+        ax.imshow(he_image)
 
-    fig.savefig(save_path, bbox_inches="tight")
-    plt.close(fig)
+    if save_path is not None:
+        fig.savefig(save_path, bbox_inches="tight")
+
+    he_image.close() if he_close else None
+
+    return fig
 
 
 def _gene_expression(
     expression_df: pd.DataFrame,
     coordinate_df: pd.DataFrame,
     gene: str,
-    save_path: Union[str, Path],
-    he_image: Optional[Union[str, Path]] = None,
+    save_path: Optional[Union[str, Path]] = None,
+    he_image: Optional[Union[str, Path, Image.Image]] = None,
     s: float = 4,
     dpi: float = 300,
-) -> None:
+) -> mpl.figure.Figure:
     """
     Draw expression for one gene.
 
@@ -375,10 +421,10 @@ def _gene_expression(
     gene : str
         Which gene to draw.
 
-    save_path : str or pathlib.Path
-        Heatmap save path.
+    save_path : str or pathlib.Path, default None
+        Heatmap save path. If None, plot will not save.
 
-    he_image : str or pathlib.Path, default None
+    he_image : str, pathlib.Path or PIL.Image.Image, default None
         H&E image of tissue. If None is given (default), distribution map
         will not show tissue picture.
 
@@ -387,6 +433,11 @@ def _gene_expression(
 
     dpi : float, default 300
         DPI for saved figure.
+
+    Returns
+    =======
+    fig : matplotlib.figure.Figure
+        A matplotlib.figure.Figure plot.
     """
     fig, ax = plt.subplots(figsize=(10, 10), dpi=dpi)
 
@@ -404,24 +455,31 @@ def _gene_expression(
     )
     fig.colorbar(sc)
 
+    he_close = False
     if he_image is not None:
-        with Image.open(he_image) as he_image:
-            ax.imshow(he_image)
+        if not isinstance(he_image, Image.Image):
+            he_close = True
+            he_image = Image.open(he_image)
+        ax.imshow(he_image)
 
-    fig.savefig(save_path, bbox_inches="tight")
-    plt.close(fig)
+    if save_path is not None:
+        fig.savefig(save_path, bbox_inches="tight")
+
+    he_image.close() if he_close else None
+
+    return fig
 
 
 def _spot_type_map(
     hotspot_df: pd.DataFrame,
     coordinate_df: pd.DataFrame,
     type_df: pd.DataFrame,
-    save_path: Union[str, Path],
-    he_image: Optional[Union[str, Path]] = None,
+    save_path: Optional[Union[str, Path]] = None,
+    he_image: Optional[Union[str, Path, Image.Image]] = None,
     draw_uncertain: bool = True,
     s: float = 16,
     dpi: float = 300,
-) -> None:
+) -> mpl.figure.Figure:
     """
     Draw SVG type map.
 
@@ -436,10 +494,10 @@ def _spot_type_map(
     type_df : pd.DataFrame
         A pd.DataFrame for spot type.
 
-    save_path : str or pathlib.Path
-        Type map save path.
+    save_path : str or pathlib.Path, default None
+        Heatmap save path. If None, plot will not save.
 
-    he_image : str or pathlib.Path, default None
+    he_image : str, pathlib.Path or PIL.Image.Image, default None
         H&E image of tissue. If None is given (default), distribution map
         will not show tissue picture.
 
@@ -451,6 +509,11 @@ def _spot_type_map(
 
     dpi : float, default 300
         DPI for saved figure.
+
+    Returns
+    =======
+    fig : matplotlib.figure.Figure
+        A matplotlib.figure.Figure plot.
     """
 
     if draw_uncertain:
@@ -493,26 +556,33 @@ def _spot_type_map(
     )
     ax.add_artist(leg)
 
-    if he_image is not None:
-        with Image.open(he_image) as he_image:
-            ax.imshow(he_image)
-
     ax.axis("off")
     ax.set_xticks([])
     ax.set_yticks([])
     ax.set_title("Spot type map", fontsize=legend_fontsize)
 
-    fig.savefig(save_path)
-    plt.close(fig)
+    he_close = False
+    if he_image is not None:
+        if not isinstance(he_image, Image.Image):
+            he_close = True
+            he_image = Image.open(he_image)
+        ax.imshow(he_image)
+
+    if save_path is not None:
+        fig.savefig(save_path, bbox_inches="tight")
+
+    he_image.close() if he_close else None
+
+    return fig
 
 
 def svg_heatmap(
     dataset: STDataset,
-    save_path: Union[str, Path],
-    he_image: Optional[Union[str, Path]] = None,
+    save_path: Optional[Union[str, Path]] = None,
+    he_image: Optional[Union[str, Path, Image.Image]] = None,
     s: float = 4,
     dpi: float = 300,
-) -> None:
+) -> mpl.figure.Figure:
     """
     Draw SVG distribution heatmap.
 
@@ -521,10 +591,10 @@ def svg_heatmap(
     dataset : STDataset
         A STDataset with hotspot and SVG cluster estimation finished.
 
-    save_path : str or pathlib.Path
-        Heatmap save path.
+    save_path : str or pathlib.Path, default None
+        Heatmap save path. If None, plot will not save.
 
-    he_image : str or pathlib.Path, default None
+    he_image : str, pathlib.Path or PIL.Image.Image, default None
         H&E image of tissue. If None is given (default), distribution map
         will not show tissue picture.
 
@@ -533,12 +603,17 @@ def svg_heatmap(
 
     dpi : float, default 300
         DPI for saved figure.
+
+    Returns
+    =======
+    fig : matplotlib.figure.Figure
+        A matplotlib.figure.Figure plot.
     """
     coor_df = dataset.coordinate_df
     if he_image is None:
         if dataset._array_coordinate is not None:
             coor_df = dataset._array_coordinate
-    _svg_heatmap(
+    return _svg_heatmap(
         hotspot_df=dataset.hotspot_df,
         coordinate_df=coor_df,
         cluster_result=dataset.svg_cluster,
@@ -553,11 +628,11 @@ def svg_heatmap(
 def hotspot_distribution_map(
     dataset: STDataset,
     cluster: Union[str, int],
-    save_path: Union[str, Path],
-    he_image: Optional[Union[str, Path]] = None,
+    save_path: Optional[Union[str, Path]] = None,
+    he_image: Optional[Union[str, Path, Image.Image]] = None,
     s: float = 4,
     dpi: float = 300,
-) -> None:
+) -> mpl.figure.Figure:
     """
     Draw hotspot distribution map for one SVG cluster.
 
@@ -569,10 +644,10 @@ def hotspot_distribution_map(
     cluster : str or int
         Specify drawing cluster.
 
-    save_path : str or pathlib.Path
-        Heatmap save path.
+    save_path : str or pathlib.Path, default None
+        Heatmap save path. If None, plot will not save.
 
-    he_image : str or pathlib.Path, default None
+    he_image : str, pathlib.Path or PIL.Image.Image, default None
         H&E image of tissue. If None is given (default), distribution map
         will not show tissue picture.
 
@@ -581,12 +656,17 @@ def hotspot_distribution_map(
 
     dpi : float, default 300
         DPI for saved figure.
+
+    Returns
+    =======
+    fig : matplotlib.figure.Figure
+        A matplotlib.figure.Figure plot.
     """
     coor_df = dataset.coordinate_df
     if he_image is None:
         if dataset._array_coordinate is not None:
             coor_df = dataset._array_coordinate
-    _hotspot_distribution_map(
+    return _hotspot_distribution_map(
         hotspot_df=dataset.hotspot_df,
         coordinate_df=coor_df,
         cluster_result=dataset.svg_cluster,
@@ -601,11 +681,11 @@ def hotspot_distribution_map(
 def hotspot_expression(
     dataset: STDataset,
     gene: str,
-    save_path: Union[str, Path],
-    he_image: Optional[Union[str, Path]] = None,
+    save_path: Optional[Union[str, Path]] = None,
+    he_image: Optional[Union[str, Path, Image.Image]] = None,
     s: float = 4,
     dpi: float = 300,
-) -> None:
+) -> mpl.figure.Figure:
     """
     Draw hotspot expression for one gene.
 
@@ -617,10 +697,10 @@ def hotspot_expression(
     gene : str
         Which gene to draw.
 
-    save_path : str or pathlib.Path
-        Heatmap save path.
+    save_path : str or pathlib.Path, default None
+        Heatmap save path. If None, plot will not save.
 
-    he_image : str or pathlib.Path, default None
+    he_image : str, pathlib.Path or PIL.Image.Image, default None
         H&E image of tissue. If None is given (default), distribution map
         will not show tissue picture.
 
@@ -629,12 +709,17 @@ def hotspot_expression(
 
     dpi : float, default 300
         DPI for saved figure.
+
+    Returns
+    =======
+    fig : matplotlib.figure.Figure
+        A matplotlib.figure.Figure plot.
     """
     coor_df = dataset.coordinate_df
     if he_image is None:
         if dataset._array_coordinate is not None:
             coor_df = dataset._array_coordinate
-    _hotspot_expression(
+    return _hotspot_expression(
         hotspot_df=dataset.hotspot_df,
         coordinate_df=coor_df,
         gene=gene,
@@ -648,11 +733,11 @@ def hotspot_expression(
 def hotspot_colocalization_map(
     dataset: STDataset,
     genes: list,
-    save_path: Union[str, Path],
-    he_image: Optional[Union[str, Path]] = None,
+    save_path: Optional[Union[str, Path]] = None,
+    he_image: Optional[Union[str, Path, Image.Image]] = None,
     s: float = 4,
     dpi: float = 300,
-) -> None:
+) -> mpl.figure.Figure:
     """
     Draw hotspot expression for multiple genes.
 
@@ -664,10 +749,10 @@ def hotspot_colocalization_map(
     genes : str
         Which genes to draw.
 
-    save_path : str or pathlib.Path
-        Heatmap save path.
+    save_path : str or pathlib.Path, default None
+        Heatmap save path. If None, plot will not save.
 
-    he_image : str or pathlib.Path, default None
+    he_image : str, pathlib.Path or PIL.Image.Image, default None
         H&E image of tissue. If None is given (default), distribution map
         will not show tissue picture.
 
@@ -676,12 +761,17 @@ def hotspot_colocalization_map(
 
     dpi : float, default 300
         DPI for saved figure.
+
+    Returns
+    =======
+    fig : matplotlib.figure.Figure
+        A matplotlib.figure.Figure plot.
     """
     coor_df = dataset.coordinate_df
     if he_image is None:
         if dataset._array_coordinate is not None:
             coor_df = dataset._array_coordinate
-    _hotspot_colocalization_map(
+    return _hotspot_colocalization_map(
         hotspot_df=dataset.hotspot_df,
         coordinate_df=coor_df,
         genes=genes,
@@ -695,11 +785,11 @@ def hotspot_colocalization_map(
 def gene_expression(
     dataset: STDataset,
     gene: str,
-    save_path: Union[str, Path],
-    he_image: Optional[Union[str, Path]] = None,
+    save_path: Optional[Union[str, Path]] = None,
+    he_image: Optional[Union[str, Path, Image.Image]] = None,
     s: float = 4,
     dpi: float = 300,
-) -> None:
+) -> mpl.figure.Figure:
     """
     Draw expression for one gene.
 
@@ -711,10 +801,10 @@ def gene_expression(
     gene : str
         Which gene to draw.
 
-    save_path : str or pathlib.Path
-        Heatmap save path.
+    save_path : str or pathlib.Path, default None
+        Heatmap save path. If None, plot will not save.
 
-    he_image : str or pathlib.Path, default None
+    he_image : str, pathlib.Path or PIL.Image.Image, default None
         H&E image of tissue. If None is given (default), distribution map
         will not show tissue picture.
 
@@ -723,12 +813,17 @@ def gene_expression(
 
     dpi : float, default 300
         DPI for saved figure.
+
+    Returns
+    =======
+    fig : matplotlib.figure.Figure
+        A matplotlib.figure.Figure plot.
     """
     coor_df = dataset.coordinate_df
     if he_image is None:
         if dataset._array_coordinate is not None:
             coor_df = dataset._array_coordinate
-    _gene_expression(
+    return _gene_expression(
         expression_df=dataset.count_df,
         coordinate_df=coor_df,
         gene=gene,
@@ -741,12 +836,12 @@ def gene_expression(
 
 def spot_type_map(
     dataset: STDataset,
-    save_path: Union[str, Path],
-    he_image: Optional[Union[str, Path]] = None,
+    save_path: Optional[Union[str, Path]] = None,
+    he_image: Optional[Union[str, Path, Image.Image]] = None,
     draw_uncertain: bool = True,
     s: float = 16,
     dpi: float = 300,
-) -> None:
+) -> mpl.figure.Figure:
     """
     Draw SVG type map.
 
@@ -755,10 +850,10 @@ def spot_type_map(
     dataset : STDataset
         A STDataset with hotspot and SVG cluster estimation finished.
 
-    save_path : str or pathlib.Path
-        Type map save path.
+    save_path : str or pathlib.Path, default None
+        Heatmap save path. If None, plot will not save.
 
-    he_image : str or pathlib.Path, default None
+    he_image : str, pathlib.Path or PIL.Image.Image, default None
         H&E image of tissue. If None is given (default), distribution map
         will not show tissue picture.
 
@@ -770,12 +865,17 @@ def spot_type_map(
 
     dpi : float, default 300
         DPI for saved figure.
+
+    Returns
+    =======
+    fig : matplotlib.figure.Figure
+        A matplotlib.figure.Figure plot.
     """
     coor_df = dataset.coordinate_df
     if he_image is None:
         if dataset._array_coordinate is not None:
             coor_df = dataset._array_coordinate
-    _spot_type_map(
+    return _spot_type_map(
         hotspot_df=dataset.hotspot_df,
         coordinate_df=coor_df,
         type_df=dataset.spot_type,
