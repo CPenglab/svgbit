@@ -36,3 +36,7 @@ def plot_gmm(gmm, hist_data, save_path) -> None:
         )
     ax.legend()
     fig.savefig(save_path)
+
+
+def get_cmap(length):
+    return plt.colormaps["hsv"].resampled(length)

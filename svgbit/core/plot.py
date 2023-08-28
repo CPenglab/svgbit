@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from itertools import combinations
 from math import ceil
 from pathlib import Path
 from typing import Optional, Union
@@ -8,9 +9,10 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import pandas as pd
 from PIL import Image
-from seaborn import color_palette
+from scipy.special import comb
 
 from .STDataset import STDataset
+from .utils import get_cmap
 
 
 def _svg_heatmap(
@@ -254,6 +256,102 @@ def _hotspot_expression(
     fig.savefig(save_path, bbox_inches="tight")
     plt.close(fig)
 
+
+def _hotspot_colocalization_map(
+    hotspot_df: pd.DataFrame,
+    coordinate_df: pd.DataFrame,
+    genes: list,
+    save_path: Union[str, Path],
+    he_image: Optional[Union[str, Path]] = None,
+    s: float = 4,
+    dpi: float = 300,
+) -> None:
+    """
+    Draw hotspot expression for multiple genes.
+
+    Parameters
+    ==========
+    hotspot_df : pd.DataFrame
+        A pd.DataFrame for hotspots.
+
+    coordinate_df : pd.DataFrame
+        A pd.DataFrame for coordinate files.
+
+    genes : str
+        Which genes to draw.
+
+    save_path : str or pathlib.Path
+        Heatmap save path.
+
+    he_image : str or pathlib.Path, default None
+        H&E image of tissue. If None is given (default), distribution map
+        will not show tissue picture.
+
+    s : float, default 4
+        Spot size.
+
+    dpi : float, default 300
+        DPI for saved figure.
+    """
+    fig, ax = plt.subplots(figsize=(10, 10), dpi=dpi)
+    hotspot_df = hotspot_df.copy().sparse.to_dense()
+
+    if len(genes) <= 3:
+        colors = [
+            "tab:red", "tab:green", "tab:blue", "tab:orange", "tab:pink",
+            "tab:cyan", "k"
+        ]
+    else:
+        i = len(genes)
+        n_colors = 0
+        while i > 0:
+            n_colors += comb(len(genes), i)
+            i -= 1
+        colors = get_cmap(n_colors)
+
+    ax.set_xticks([])
+    ax.set_yticks([])
+    ax.axis("off")
+
+    for i, gene in enumerate(genes):
+        draw_counts = hotspot_df[gene].loc[hotspot_df[gene] == 1]
+        ax.scatter(
+            coordinate_df.iloc[:, 0].reindex(index=draw_counts.index),
+            coordinate_df.iloc[:, 1].reindex(index=draw_counts.index),
+            s=s,
+            color=colors[i],
+            alpha=0.7,
+            label=f"{gene}",
+        )
+
+    n_combinations = 2
+    while n_combinations <= len(genes):
+        for c in combinations(genes, n_combinations):
+            i += 1
+            draw_counts = pd.Series(index=coordinate_df.index, dtype=int)
+            draw_counts = draw_counts.fillna(0)
+            for gene in c:
+                draw_counts += hotspot_df[gene]
+            draw_counts = draw_counts[draw_counts == n_combinations]
+            ax.scatter(
+                coordinate_df.iloc[:, 0].reindex(index=draw_counts.index),
+                coordinate_df.iloc[:, 1].reindex(index=draw_counts.index),
+                c=colors[i],
+                s=s,
+                label=" & ".join(c),
+            )
+        n_combinations += 1
+
+    ax.legend(markerscale=2)
+
+    if he_image is not None:
+        with Image.open(he_image) as he_image:
+            ax.imshow(he_image)
+
+    fig.savefig(save_path, bbox_inches="tight")
+    plt.close(fig)
+
+
 def _gene_expression(
     expression_df: pd.DataFrame,
     coordinate_df: pd.DataFrame,
@@ -301,8 +399,6 @@ def _gene_expression(
         coordinate_df.iloc[:, 1],
         c=expression_df[gene],
         cmap="autumn_r",
-        vmin=0,
-        vmax=1,
         s=s,
         alpha=0.7,
     )
@@ -314,6 +410,7 @@ def _gene_expression(
 
     fig.savefig(save_path, bbox_inches="tight")
     plt.close(fig)
+
 
 def _spot_type_map(
     hotspot_df: pd.DataFrame,
@@ -371,7 +468,7 @@ def _spot_type_map(
         cmap = "tab20"
         ncol = 2
     else:
-        cmap = color_palette(palette="hls", n_colors=ncs, as_cmap=True)
+        cmap = get_cmap(ncs)
         ncol = 4
 
     if mpl.rcParams["legend.title_fontsize"] is None:
@@ -500,6 +597,7 @@ def hotspot_distribution_map(
         dpi=dpi,
     )
 
+
 def hotspot_expression(
     dataset: STDataset,
     gene: str,
@@ -514,7 +612,7 @@ def hotspot_expression(
     Parameters
     ==========
     dataset : STDataset
-        A STDataset with hotspot and SVG cluster estimation finished.
+        A STDataset with hotspot estimation finished.
 
     gene : str
         Which gene to draw.
@@ -545,6 +643,54 @@ def hotspot_expression(
         s=s,
         dpi=dpi,
     )
+
+
+def hotspot_colocalization_map(
+    dataset: STDataset,
+    genes: list,
+    save_path: Union[str, Path],
+    he_image: Optional[Union[str, Path]] = None,
+    s: float = 4,
+    dpi: float = 300,
+) -> None:
+    """
+    Draw hotspot expression for multiple genes.
+
+    Parameters
+    ==========
+    dataset : STDataset
+        A STDataset with hotspot estimation finished.
+
+    genes : str
+        Which genes to draw.
+
+    save_path : str or pathlib.Path
+        Heatmap save path.
+
+    he_image : str or pathlib.Path, default None
+        H&E image of tissue. If None is given (default), distribution map
+        will not show tissue picture.
+
+    s : float, default 4
+        Spot size.
+
+    dpi : float, default 300
+        DPI for saved figure.
+    """
+    coor_df = dataset.coordinate_df
+    if he_image is None:
+        if dataset._array_coordinate is not None:
+            coor_df = dataset._array_coordinate
+    _hotspot_colocalization_map(
+        hotspot_df=dataset.hotspot_df,
+        coordinate_df=coor_df,
+        genes=genes,
+        save_path=save_path,
+        he_image=he_image,
+        s=s,
+        dpi=dpi,
+    )
+
 
 def gene_expression(
     dataset: STDataset,
@@ -591,6 +737,7 @@ def gene_expression(
         s=s,
         dpi=dpi,
     )
+
 
 def spot_type_map(
     dataset: STDataset,

@@ -72,6 +72,10 @@ Visualization
 
     plot.svg_heatmap
     plot.spot_type_map
+    plot.hotspot_distribution_map
+    plot.hotspot_expression
+    plot.gene_expression
+    plot.hotspot_colocalization_map
 
 
 
@@ -82,7 +86,7 @@ Gene combinations
     :toctree: _autosummary
     :recursive:
 
-   find_combinations 
+   find_combinations
 
 
 

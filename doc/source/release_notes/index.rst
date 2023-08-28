@@ -4,6 +4,14 @@ Release notes
 
 
 
+0.2.14
+======
+Release date:
+
+Add plot functions.
+
+
+
 0.2.13
 ======
 Release date: Aug. 16, 2023
