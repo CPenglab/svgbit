@@ -3,7 +3,7 @@ from __future__ import annotations
 from itertools import combinations
 from math import ceil
 from pathlib import Path
-from typing import Optional, Union
+from typing import Optional, Union, List
 
 import matplotlib as mpl
 import matplotlib.pyplot as plt
@@ -307,6 +307,7 @@ def _hotspot_colocalization_map(
     he_image: Optional[Union[str, Path, Image.Image]] = None,
     s: float = 4,
     dpi: float = 300,
+    colors: Optional[List] = None,
 ) -> mpl.figure.Figure:
     """
     Draw hotspot expression for multiple genes.
@@ -335,6 +336,9 @@ def _hotspot_colocalization_map(
     dpi : float, default 300
         DPI for saved figure.
 
+    colors : list, default None
+        A list for spot colors. If None, auto generate colors.
+
     Returns
     =======
     fig : matplotlib.figure.Figure
@@ -352,18 +356,19 @@ def _hotspot_colocalization_map(
 
     hotspot_df = hotspot_df.copy().sparse.to_dense()
 
-    if len(genes) <= 3:
-        colors = [
-            "tab:red", "tab:green", "tab:blue", "tab:orange", "tab:pink",
-            "tab:cyan", "k"
-        ]
-    else:
-        i = len(genes)
-        n_colors = 0
-        while i > 0:
-            n_colors += comb(len(genes), i)
-            i -= 1
-        colors = get_cmap(n_colors)
+    if colors is None:
+        if len(genes) <= 3:
+            colors = [
+                "tab:red", "tab:green", "tab:blue", "tab:orange", "tab:pink",
+                "tab:cyan", "k"
+            ]
+        else:
+            i = len(genes)
+            n_colors = 0
+            while i > 0:
+                n_colors += comb(len(genes), i)
+                i -= 1
+            colors = get_cmap(n_colors)
 
     ax.set_xticks([])
     ax.set_yticks([])
@@ -755,6 +760,7 @@ def hotspot_colocalization_map(
     he_image: Optional[Union[str, Path, Image.Image]] = None,
     s: float = 4,
     dpi: float = 300,
+    colors: Optional[list] = None,
 ) -> mpl.figure.Figure:
     """
     Draw hotspot expression for multiple genes.
@@ -780,6 +786,9 @@ def hotspot_colocalization_map(
     dpi : float, default 300
         DPI for saved figure.
 
+    colors : list, default None
+        A list for spot colors. If None, auto generate colors.
+
     Returns
     =======
     fig : matplotlib.figure.Figure
@@ -797,6 +806,7 @@ def hotspot_colocalization_map(
         he_image=he_image,
         s=s,
         dpi=dpi,
+        colors=colors,
     )
 
 
