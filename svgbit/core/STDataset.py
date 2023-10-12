@@ -118,6 +118,8 @@ class STDataset(object):
         err = "Spots' name mismatch!"
         assert all(self._count_df.index == self._coordinate_df.index), err
 
+        self._count_df.fillna(0, inplace=True)
+
         # Rename duplicated columns
         if check_duplicate_genes:
             genes = []
