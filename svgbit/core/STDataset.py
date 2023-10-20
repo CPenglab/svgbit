@@ -240,7 +240,7 @@ class STDataset(object):
         self._hotspot_df = hotspot.reindex(
             index=self.spots,
             columns=self.genes,
-        ).astype(pd.SparseDtype("int8", 0))
+        )
         self._local_moran_i = i_value.astype(pd.SparseDtype("float", 0))
         self._local_moran_p = p_value.astype(pd.SparseDtype("float", 0))
 
