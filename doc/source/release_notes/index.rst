@@ -4,6 +4,14 @@ Release notes
 
 
 
+0.2.16
+======
+Release date: Oct. 20th, 2023
+
+Bug fix.
+
+
+
 0.2.14
 ======
 Release date:
