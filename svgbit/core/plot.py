@@ -559,6 +559,7 @@ def _spot_type_map(
     else:
         legend_fontsize = mpl.rcParams["legend.title_fontsize"]
 
+    he_close = False
     figsize = (10, 10)
     if he_image is not None:
         if not isinstance(he_image, Image.Image):
