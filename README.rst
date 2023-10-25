@@ -137,8 +137,8 @@ Visualization
 -------------
 Draw SVG heatmap and spot type distribution map with::
 
-    sb.svg_heatmap(dataset, save_path="heatmap.jpg", he_image="he_image.jpg")
-    sb.spot_type_map(dataset, save_path="spot_type.jpg", he_image="he_image.jpg")
+    sb.plot.svg_heatmap(dataset, save_path="heatmap.jpg", he_image="he_image.jpg")
+    sb.plot.spot_type_map(dataset, save_path="spot_type.jpg", he_image="he_image.jpg")
 
 Parameter ``he_image`` is optional. If not specified, hotspot discription
 map will show without morphological information.
