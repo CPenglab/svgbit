@@ -354,8 +354,6 @@ def _hotspot_colocalization_map(
 
     fig, ax = plt.subplots(figsize=figsize, dpi=dpi)
 
-    hotspot_df = hotspot_df.copy().sparse.to_dense()
-
     if colors is None:
         if len(genes) <= 3:
             colors = [
