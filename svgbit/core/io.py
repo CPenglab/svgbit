@@ -11,7 +11,11 @@ import scipy.io
 from .STDataset import STDataset
 
 
-def load_10X(read_path, make_sparse=True) -> STDataset:
+def load_10X(
+    read_path,
+    file_name="filtered_feature_bc_matrix",
+    make_sparse=True,
+) -> STDataset:
     """
     Load 10X Genomics Space Ranger outputs and generate STDataset.
 
@@ -19,7 +23,7 @@ def load_10X(read_path, make_sparse=True) -> STDataset:
     ==========
     read_path : str or pathlib.Path
         A location points to 10X outs dir. Assume directories
-        ``filtered_feature_bc_matrix`` and ``spatial`` are in this
+        filename and ``spatial`` are in this
         path.
 
     make_sparse : bool, default True
@@ -31,7 +35,7 @@ def load_10X(read_path, make_sparse=True) -> STDataset:
         A STDataset instance generated from read_path.
     """
     read_path = Path(read_path)
-    mat_dir = Path.joinpath(read_path, "filtered_feature_bc_matrix")
+    mat_dir = Path.joinpath(read_path, file_name)
     mtx_path = Path.joinpath(mat_dir, "matrix.mtx.gz")
     features_path = Path.joinpath(mat_dir, "features.tsv.gz")
     barcodes_path = Path.joinpath(mat_dir, "barcodes.tsv.gz")

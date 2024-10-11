@@ -4,6 +4,13 @@ Release notes
 
 
 
+0.2.17
+======
+Release date: Oct. 11th, 2024
+Read function.
+
+
+
 0.2.16
 ======
 Release date: Oct. 20th, 2023
